@@ -1,0 +1,637 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        15.32317066192627,
+        43.14549255371094,
+        22.710613250732422
+      ],
+      "min": [
+        -15.697948455810547,
+        -72.91011047363281,
+        -24.97031021118164
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 786384,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9999628067016602,
+        0.9998832941055298,
+        0.9885950088500977
+      ],
+      "min": [
+        -0.9999583959579468,
+        -0.9998961687088013,
+        -0.9999448657035828
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.0983811616897583,
+        0.9953113794326782
+      ],
+      "min": [
+        0.00034482061164453626,
+        0.009781956672668457
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 524256,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.0983811616897583,
+        0.9953113794326782
+      ],
+      "min": [
+        0.00034482061164453626,
+        0.009781956672668457
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 98298,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1572768,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        15.12388801574707,
+        37.463409423828125,
+        22.160343170166016
+      ],
+      "min": [
+        -11.802495956420898,
+        -45.227569580078125,
+        -15.792226791381836
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1603536,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        0.9921629428863525,
+        0.327692449092865,
+        0.9883215427398682
+      ],
+      "min": [
+        -0.9677873253822327,
+        -0.3713042736053467,
+        -0.1852995604276657
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1048512,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        1.0089242458343506,
+        0.8834869265556335
+      ],
+      "min": [
+        0.00025299223489128053,
+        0.09575307369232178
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1069024,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        1.0089242458343506,
+        0.8834869265556335
+      ],
+      "min": [
+        0.00025299223489128053,
+        0.09575307369232178
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 393192,
+      "componentType": 5125,
+      "count": 3846,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 1634304,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        15.29806137084961,
+        42.479129791259766,
+        23.131053924560547
+      ],
+      "min": [
+        -15.665246963500977,
+        -72.9073486328125,
+        -25.092849731445313
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 2420688,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        0.9988580942153931,
+        0.9115748405456543,
+        0.9998018741607666
+      ],
+      "min": [
+        -0.9998674392700195,
+        -0.9999732971191406,
+        -0.9998973608016968
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1089536,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.0689787864685059,
+        0.9916819334030151
+      ],
+      "min": [
+        9.92140849120915e-05,
+        0.007217288017272949
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 1613792,
+      "componentType": 5126,
+      "count": 65532,
+      "max": [
+        1.0689787864685059,
+        0.9916819334030151
+      ],
+      "min": [
+        9.92140849120915e-05,
+        0.007217288017272949
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 408576,
+      "componentType": 5125,
+      "count": 98298,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3207072,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        5.082679748535156,
+        42.807899475097656,
+        19.020992279052734
+      ],
+      "min": [
+        -4.869974136352539,
+        -45.316871643066406,
+        -24.445877075195313
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 3237840,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        0.21107962727546692,
+        0.9537817239761353,
+        0.5392913818359375
+      ],
+      "min": [
+        -0.9830743074417114,
+        0.11391888558864594,
+        -0.9880897402763367
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2138048,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        1.0323740243911743,
+        0.9708592295646667
+      ],
+      "min": [
+        0.030160102993249893,
+        0.023585081100463867
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 2158560,
+      "componentType": 5126,
+      "count": 2564,
+      "max": [
+        1.0323740243911743,
+        0.9708592295646667
+      ],
+      "min": [
+        0.030160102993249893,
+        0.023585081100463867
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 801768,
+      "componentType": 5125,
+      "count": 3846,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 92,
+      "max": [
+        1.840000033378601
+      ],
+      "min": [
+        0.0
+      ],
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "componentType": 5126,
+      "count": 92,
+      "max": [
+        0.04654936119914055,
+        0.9986913204193115,
+        0.03973505273461342,
+        0.9989147782325745
+      ],
+      "min": [
+        -0.022877439856529236,
+        -0.8526847958564758,
+        -0.04653894901275635,
+        -0.4909328818321228
+      ],
+      "type": "VEC4"
+    }
+  ],
+  "animations": [
+    {
+      "channels": [
+        {
+          "sampler": 0,
+          "target": {
+            "node": 4,
+            "path": "rotation"
+          }
+        }
+      ],
+      "name": "CINEMA_4D_Main",
+      "samplers": [
+        {
+          "input": 20,
+          "interpolation": "LINEAR",
+          "output": 21
+        }
+      ]
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "CzernO (https://sketchfab.com/czernobog)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/candy-cane-b5b1280f5561460688a7cb73224b7995",
+      "title": "Candy cane"
+    },
+    "generator": "Sketchfab-15.5.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 817152,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2179072,
+      "byteOffset": 817152,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3268608,
+      "byteOffset": 2996224,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 368,
+      "byteOffset": 6264832,
+      "name": "floatBufferViews"
+    },
+    {
+      "buffer": 0,
+      "byteLength": 1472,
+      "byteOffset": 6265200,
+      "byteStride": 16,
+      "name": "floatBufferViews"
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 6266672,
+      "uri": "scene.bin"
+    }
+  ],
+  "extensionsRequired": [
+    "KHR_materials_pbrSpecularGlossiness"
+  ],
+  "extensionsUsed": [
+    "KHR_materials_pbrSpecularGlossiness"
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.64,
+        0.0704,
+        0.18432
+      ],
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            0.0,
+            0.004583330000000001,
+            1.0
+          ],
+          "glossinessFactor": 0.6036471918720245,
+          "specularFactor": [
+            0.0321109145188455,
+            0.0321109145188455,
+            0.0321109145188455
+          ]
+        }
+      },
+      "name": "candy_cane-red"
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.87,
+        0.8178,
+        0.82824
+      ],
+      "extensions": {
+        "KHR_materials_pbrSpecularGlossiness": {
+          "diffuseFactor": [
+            1.0,
+            0.995333,
+            0.96,
+            1.0
+          ],
+          "glossinessFactor": 0.061113543808417006,
+          "specularFactor": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "name": "WHITE_CANDY_CANE"
+    }
+  ],
+  "meshes": [
+    {
+      "name": "ZBrush_defualt_group_candy_cane-red_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2,
+            "TEXCOORD_1": 3
+          },
+          "indices": 4,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "ZBrush_defualt_group_candy_cane-red_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 6,
+            "POSITION": 5,
+            "TEXCOORD_0": 7,
+            "TEXCOORD_1": 8
+          },
+          "indices": 9,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "ZBrush_defualt_group_WHITE_CANDY_CANE_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10,
+            "TEXCOORD_0": 12,
+            "TEXCOORD_1": 13
+          },
+          "indices": 14,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "ZBrush_defualt_group_WHITE_CANDY_CANE_1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 16,
+            "POSITION": 15,
+            "TEXCOORD_0": 17,
+            "TEXCOORD_1": 18
+          },
+          "indices": 19,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Candy cane.c4d.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "Object_2"
+    },
+    {
+      "children": [
+        4
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        5
+      ],
+      "name": "Subdivision_Surface",
+      "rotation": [
+        0.03888402879238129,
+        0.5491560697555542,
+        -0.02559063583612442,
+        0.8344224095344543
+      ],
+      "translation": [
+        -79.35438537597656,
+        79.751708984375,
+        0.9443649649620056
+      ]
+    },
+    {
+      "children": [
+        6,
+        7,
+        8,
+        9
+      ],
+      "name": "ZBrush_defualt_group",
+      "rotation": [
+        1.9949319973733282e-17,
+        -2.7755575615628914e-17,
+        3.469446951953614e-18,
+        1.0
+      ],
+      "translation": [
+        -0.056903176009655,
+        1.1711632013320923,
+        1.744781255722046
+      ]
+    },
+    {
+      "mesh": 0,
+      "name": "ZBrush_defualt_group_candy_cane-red_0"
+    },
+    {
+      "mesh": 1,
+      "name": "ZBrush_defualt_group_candy_cane-red_0"
+    },
+    {
+      "mesh": 2,
+      "name": "ZBrush_defualt_group_WHITE_CANDY_CANE_1"
+    },
+    {
+      "mesh": 3,
+      "name": "ZBrush_defualt_group_WHITE_CANDY_CANE_1"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

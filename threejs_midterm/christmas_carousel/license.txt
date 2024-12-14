@@ -1,0 +1,11 @@
+Model Information:
+* title:	Christmas Carousel
+* source:	https://sketchfab.com/3d-models/christmas-carousel-fa6e353954f8424f9f466571d8ae949e
+* author:	SkyeSladeUT (https://sketchfab.com/SkyeSladeUT)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Christmas Carousel" (https://sketchfab.com/3d-models/christmas-carousel-fa6e353954f8424f9f466571d8ae949e) by SkyeSladeUT (https://sketchfab.com/SkyeSladeUT) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
