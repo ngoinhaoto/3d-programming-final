@@ -1,0 +1,11 @@
+Model Information:
+* title:	Xmas Caramel
+* source:	https://sketchfab.com/3d-models/xmas-caramel-bdf06e37a6254c8fa6c4a21320249991
+* author:	dimoni (https://sketchfab.com/dimoni)
+
+Model License:
+* license type:	CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)
+* requirements:	Author must be credited. No commercial use. Modified versions must have the same license.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Xmas Caramel" (https://sketchfab.com/3d-models/xmas-caramel-bdf06e37a6254c8fa6c4a21320249991) by dimoni (https://sketchfab.com/dimoni) licensed under CC-BY-NC-SA-4.0 (http://creativecommons.org/licenses/by-nc-sa/4.0/)

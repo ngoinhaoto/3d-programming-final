@@ -1,0 +1,11 @@
+Model Information:
+* title:	Christmas Deer
+* source:	https://sketchfab.com/3d-models/christmas-deer-eda83fad94894127bed0d9b30a16d3d1
+* author:	Jerrad Lancaster (https://sketchfab.com/jlancaster)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Christmas Deer" (https://sketchfab.com/3d-models/christmas-deer-eda83fad94894127bed0d9b30a16d3d1) by Jerrad Lancaster (https://sketchfab.com/jlancaster) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
