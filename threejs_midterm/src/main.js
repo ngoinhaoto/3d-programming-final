@@ -12,12 +12,14 @@ import {
   loadLogCabinModel,
 } from "./loadAssets";
 
+import { createSnowParticles, updateSnowParticles } from "./snowParticles.js";
+
 const scene = new THREE.Scene();
-scene.fog = new THREE.Fog(0x000036, 0, 300); // Add fog to simulate atmosphere
+scene.fog = new THREE.Fog(0x000036, 0, 500); // Add fog to simulate atmosphere
 const noise = new SimplexNoise();
 
 const camera = new THREE.PerspectiveCamera(
-  75,
+  85,
   window.innerWidth / window.innerHeight,
   0.1,
   800,
@@ -44,8 +46,8 @@ function addLighting() {
   const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5);
   scene.add(hemisphereLight);
 
-  const warmLight = new THREE.DirectionalLight(0xffbb06, 50); // Warm orange light
-  warmLight.position.set(0, 150, 0); // Position it above, simulating the sun or a strong light source
+  const warmLight = new THREE.DirectionalLight(0xffbb06, 100); // Warm orange light
+  warmLight.position.set(180, 150, 0); // Position it above, simulating the sun or a strong light source
   warmLight.castShadow = true; // Enable shadow casting
   warmLight.shadow.camera.near = 0.1; // Near plane for the shadow camera
   warmLight.shadow.camera.far = 500; // Far plane for the shadow camera
@@ -67,75 +69,7 @@ const createGroundPlane = () => {
   scene.add(plane);
 };
 
-// === Snow Particles ===
-const particleNum = 5000;
-const maxRange = 300;
-const minRange = maxRange / 2;
-const textureSize = 64.0;
-
-const getTexture = () => {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-
-  const diameter = textureSize;
-  canvas.width = diameter;
-  canvas.height = diameter;
-  const canvasRadius = diameter / 2;
-
-  const gradient = ctx.createRadialGradient(
-    canvasRadius,
-    canvasRadius,
-    0,
-    canvasRadius,
-    canvasRadius,
-    canvasRadius,
-  );
-  gradient.addColorStop(0, "rgba(255,255,255,1.0)");
-  gradient.addColorStop(0.5, "rgba(255,255,255,0.5)");
-  gradient.addColorStop(1, "rgba(255,255,255,0)");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-  const texture = new THREE.Texture(canvas);
-  texture.type = THREE.FloatType;
-  texture.needsUpdate = true;
-  return texture;
-};
-
 let particles;
-
-const createSnowParticles = () => {
-  const pointGeometry = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleNum * 3);
-
-  for (let i = 0; i < particleNum; i++) {
-    const x = Math.floor(Math.random() * maxRange - minRange);
-    const y = Math.floor(Math.random() * maxRange - minRange);
-    const z = Math.floor(Math.random() * maxRange - minRange);
-
-    positions[i * 3] = x;
-    positions[i * 3 + 1] = y;
-    positions[i * 3 + 2] = z;
-  }
-
-  pointGeometry.setAttribute(
-    "position",
-    new THREE.BufferAttribute(positions, 3),
-  );
-
-  const pointMaterial = new THREE.PointsMaterial({
-    size: 1.5,
-    color: 0xffffff,
-    vertexColors: false,
-    map: getTexture(),
-    transparent: true,
-    fog: true,
-    depthWrite: false,
-  });
-
-  particles = new THREE.Points(pointGeometry, pointMaterial);
-  scene.add(particles);
-};
 
 const makeRoughGround = (mesh) => {
   const time = Date.now();
@@ -176,7 +110,7 @@ function animate() {
     if (moveLeft) spongebob.position.x -= movementSpeed;
     if (moveRight) spongebob.position.x += movementSpeed;
 
-    const cameraOffset = new THREE.Vector3(0, 60, 70); // Adjust for desired view
+    const cameraOffset = new THREE.Vector3(0, 40, 100);
     camera.position.copy(spongebob.position.clone().add(cameraOffset));
     camera.lookAt(spongebob.position);
   }
@@ -196,17 +130,9 @@ function animate() {
       }
     });
   }
-
-  // Update snow particles and other animations
-  const posArr = particles.geometry.attributes.position.array;
-  for (let i = 0; i < posArr.length; i += 3) {
-    posArr[i + 1] -= 0.03;
-    if (posArr[i + 1] < -minRange) {
-      posArr[i + 1] = minRange;
-    }
+  if (particles) {
+    updateSnowParticles(particles);
   }
-  particles.geometry.attributes.position.needsUpdate = true;
-
   // Update ground roughness
   const planeMesh = scene.children.find((child) => child instanceof THREE.Mesh);
   if (planeMesh) {
@@ -288,8 +214,8 @@ document.addEventListener("keyup", (event) => {
 });
 
 function addMoonLighting() {
-  const moonLight = new THREE.PointLight(0xaaaaaa, 1, 200); // Increase intensity
-  moonLight.position.set(0, 200, -150); // Adjust position of moonlight
+  const moonLight = new THREE.PointLight(0xaaaaaa, 1, 200);
+  moonLight.position.set(0, 200, -150);
   scene.add(moonLight);
 }
 
@@ -298,7 +224,7 @@ function init() {
   preloadBackgroundMusic(camera);
   addLighting();
   loadLowPolyWinterScene(scene);
-  createSnowParticles();
+  particles = createSnowParticles(scene); // Use snow particle system
   loadDeerModel(scene);
   loadMoonModel(scene);
   loadCarouselModel(scene);
