@@ -1,4 +1,4 @@
-# 3D Programming Midterm
+# 3D Programming Final
 
 This project is part of the **3D Programming Midterm** assignment, showcasing an interactive 3D experience built with [Three.js](https://threejs.org/) and powered by [Vite](https://vitejs.dev/).
 
