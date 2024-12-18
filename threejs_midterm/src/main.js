@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
-
+import { preloadBackgroundMusic, toggleMusic } from "./backgroundMusic.js";
 import {
   loadCarouselModel,
   loadMoonModel,
@@ -11,6 +11,7 @@ import {
   loadDeerModel,
   loadLogCabinModel,
 } from "./loadAssets";
+
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x000036, 0, 300); // Add fog to simulate atmosphere
 const noise = new SimplexNoise();
@@ -222,50 +223,8 @@ window.addEventListener("resize", () => {
   camera.updateProjectionMatrix();
 });
 
-let sound; // Global variable to store the sound instance
-let isSoundReady = false; // Flag to indicate if the sound is preloaded
-
-function preloadBackgroundMusic() {
-  const listener = new THREE.AudioListener();
-  camera.add(listener);
-
-  sound = new THREE.Audio(listener);
-  const audioLoader = new THREE.AudioLoader();
-
-  // Preload the audio buffer
-  audioLoader.load("/assets/music.mp3", (buffer) => {
-    sound.setBuffer(buffer);
-    sound.setLoop(true);
-    sound.setVolume(0.5);
-    isSoundReady = true; // Mark the sound as ready
-    console.log("Background music preloaded!");
-  });
-}
-
-function playBackgroundMusic() {
-  if (isSoundReady && sound) {
-    sound.play(); // Play the preloaded sound
-    console.log("Background music playing!");
-  } else {
-    console.error("Music is not preloaded yet!");
-  }
-}
-
-preloadBackgroundMusic();
-
-let isPlaying = false;
-
 const musicButton = document.getElementById("toggleMusicButton");
-musicButton.addEventListener("click", () => {
-  if (isPlaying) {
-    sound.stop(); // Stop the music
-    musicButton.textContent = "Play Music 🎵"; // Update button text
-  } else {
-    sound.play(); // Play the music
-    musicButton.textContent = "Stop Music 🔇"; // Update button text
-  }
-  isPlaying = !isPlaying;
-});
+musicButton.addEventListener("click", () => toggleMusic(musicButton));
 
 let spongebob;
 function loadSpongebobModel() {
@@ -335,19 +294,18 @@ function addMoonLighting() {
 }
 
 function init() {
-  playBackgroundMusic();
   loadSpongebobModel();
-
-  addLighting(); // Add enhanced lighting to the scene
-  loadLowPolyWinterScene(scene); // Load the Low Poly Winter Scene
-  createSnowParticles(); // Create snow particleds
+  preloadBackgroundMusic(camera);
+  addLighting();
+  loadLowPolyWinterScene(scene);
+  createSnowParticles();
   loadDeerModel(scene);
-  loadMoonModel(scene); // Load the moon model
-  loadCarouselModel(scene); // Load the carousel model
-  addMoonLighting(); // Add moonlight
-  createGroundPlane(); // Create the ground plane
-  loadChristmasTreeModel(scene); // Load the Christmas tree model
-  loadChristmasGifts(scene); // Load the Christmas gifts model
+  loadMoonModel(scene);
+  loadCarouselModel(scene);
+  addMoonLighting();
+  createGroundPlane();
+  loadChristmasTreeModel(scene);
+  loadChristmasGifts(scene);
   loadLogCabinModel(scene);
 
   animate();
