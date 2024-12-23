@@ -197,6 +197,23 @@ function applyTexturesToCabin(cabin) {
     }
   });
 }
+function updateGiftsEmissiveColor(scene, clock) {
+  const gifts = scene.children.find((child) => child.name === "ChristmasGifts");
+  if (gifts) {
+    gifts.traverse((child) => {
+      if (child.isMesh) {
+        const time = clock.getElapsedTime(); // Get elapsed time
+        const t = (Math.sin(time * 2) + 1) / 2; // Create a smooth oscillation between 0 and 1
+        const emissiveColor = new THREE.Color().lerpColors(
+          new THREE.Color(0xffc606), // Yellow
+          new THREE.Color(0xff4500), // Orange-Red
+          t,
+        );
+        child.material.emissive = emissiveColor;
+      }
+    });
+  }
+}
 
 export {
   loadCarouselModel,
@@ -207,4 +224,5 @@ export {
   loadDeerModel,
   loadLogCabinModel,
   applyTexturesToCabin,
+  updateGiftsEmissiveColor, // Export the new function
 };

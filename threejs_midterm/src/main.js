@@ -10,13 +10,21 @@ import {
   loadLowPolyWinterScene,
   loadDeerModel,
   loadLogCabinModel,
-} from "./loadAssets";
+  updateGiftsEmissiveColor,
+} from "./loadAssets.js";
+import {
+  movementSpeed,
+  moveForward,
+  moveBackward,
+  moveLeft,
+  moveRight,
+} from "./controls.js";
 
 import { createSnowParticles, updateSnowParticles } from "./snowParticles.js";
+import { makeRoughGround, createGroundPlane } from "./snowGround.js";
 
 const scene = new THREE.Scene();
 scene.fog = new THREE.Fog(0x000036, 0, 500); // Add fog to simulate atmosphere
-const noise = new SimplexNoise();
 
 const camera = new THREE.PerspectiveCamera(
   85,
@@ -47,58 +55,20 @@ function addLighting() {
   scene.add(hemisphereLight);
 
   const warmLight = new THREE.DirectionalLight(0xffbb06, 100); // Warm orange light
-  warmLight.position.set(180, 150, 0); // Position it above, simulating the sun or a strong light source
-  warmLight.castShadow = true; // Enable shadow casting
-  warmLight.shadow.camera.near = 0.1; // Near plane for the shadow camera
-  warmLight.shadow.camera.far = 500; // Far plane for the shadow camera
+  warmLight.position.set(180, 150, 0);
+  warmLight.castShadow = true;
+  warmLight.shadow.camera.near = 0.1;
+  warmLight.shadow.camera.far = 500;
   scene.add(warmLight);
+
+  const moonLight = new THREE.PointLight(0xaaaaaa, 1, 200);
+  moonLight.position.set(0, 200, -150);
+  scene.add(moonLight);
 }
-
-const createGroundPlane = () => {
-  const geometry = new THREE.PlaneGeometry(400, 400); // Create a large plane
-  const material = new THREE.MeshStandardMaterial({
-    color: 0xffffff, // White color for snow ground
-    roughness: 1.0,
-    metalness: 0.0,
-  });
-  const plane = new THREE.Mesh(geometry, material);
-
-  plane.rotation.x = -Math.PI / 2; // Rotate the plane to lie flat
-  plane.position.set(0, 0.5, 0); // Position it at the origin
-  plane.receiveShadow = true; // Allow the plane to receive shadows
-  scene.add(plane);
-};
 
 let particles;
 
-const makeRoughGround = (mesh) => {
-  const time = Date.now();
-  const positions = mesh.geometry.attributes.position.array;
-
-  for (let i = 0; i < positions.length; i += 3) {
-    const noise1 =
-      noise.noise2D(
-        positions[i] * 0.01 + time * 0.0001, // Slow snow rise
-        positions[i + 1] * 0.01 + time * 0.0001, // Slow snow rise
-      ) * 5;
-    const noise2 =
-      noise.noise2D(
-        positions[i] * 0.02 + time * 0.00004, // Slow snow rise
-        positions[i + 1] * 0.02 + time * 0.00006, // Slow snow rise
-      ) * 4;
-    const noise3 =
-      noise.noise2D(
-        positions[i] * 0.009 + time * 0.00006, // Slow snow rise
-        positions[i + 1] * 0.012 + time * 0.00004, // Slow snow rise
-      ) * 4;
-    const distance = noise1 + noise2 + noise3;
-    positions[i + 2] = distance; // Update the z position for roughness
-  }
-
-  mesh.geometry.attributes.position.needsUpdate = true;
-};
-
-const clock = new THREE.Clock(); // Create a clock to track time
+const clock = new THREE.Clock();
 
 function animate() {
   requestAnimationFrame(animate);
@@ -115,25 +85,12 @@ function animate() {
     camera.lookAt(spongebob.position);
   }
 
-  const gifts = scene.children.find((child) => child.name === "ChristmasGifts");
-  if (gifts) {
-    gifts.traverse((child) => {
-      if (child.isMesh) {
-        const time = clock.getElapsedTime(); // Get elapsed time
-        const t = (Math.sin(time * 2) + 1) / 2; // Create a smooth oscillation between 0 and 1
-        const emissiveColor = new THREE.Color().lerpColors(
-          new THREE.Color(0xffc606), // Yellow
-          new THREE.Color(0xff4500), // Orange-Red
-          t,
-        );
-        child.material.emissive = emissiveColor;
-      }
-    });
-  }
+  updateGiftsEmissiveColor(scene, clock);
+
   if (particles) {
     updateSnowParticles(particles);
   }
-  // Update ground roughness
+
   const planeMesh = scene.children.find((child) => child instanceof THREE.Mesh);
   if (planeMesh) {
     makeRoughGround(planeMesh);
@@ -141,8 +98,6 @@ function animate() {
 
   renderer.render(scene, camera);
 }
-
-// === Resize Handling ===
 window.addEventListener("resize", () => {
   renderer.setSize(window.innerWidth, window.innerHeight);
   camera.aspect = window.innerWidth / window.innerHeight;
@@ -177,63 +132,19 @@ function loadSpongebobModel() {
   );
 }
 
-const movementSpeed = 0.5;
-let moveForward = false;
-let moveBackward = false;
-let moveLeft = false;
-let moveRight = false;
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "w" || event.key === "W") {
-    moveForward = true;
-  }
-  if (event.key === "s" || event.key === "S") {
-    moveBackward = true;
-  }
-  if (event.key === "a" || event.key === "A") {
-    moveLeft = true;
-  }
-  if (event.key === "d" || event.key === "D") {
-    moveRight = true;
-  }
-});
-
-document.addEventListener("keyup", (event) => {
-  if (event.key === "w" || event.key === "W") {
-    moveForward = false;
-  }
-  if (event.key === "s" || event.key === "S") {
-    moveBackward = false;
-  }
-  if (event.key === "a" || event.key === "A") {
-    moveLeft = false;
-  }
-  if (event.key === "d" || event.key === "D") {
-    moveRight = false;
-  }
-});
-
-function addMoonLighting() {
-  const moonLight = new THREE.PointLight(0xaaaaaa, 1, 200);
-  moonLight.position.set(0, 200, -150);
-  scene.add(moonLight);
-}
-
 function init() {
   loadSpongebobModel();
   preloadBackgroundMusic(camera);
   addLighting();
   loadLowPolyWinterScene(scene);
-  particles = createSnowParticles(scene); // Use snow particle system
+  particles = createSnowParticles(scene);
   loadDeerModel(scene);
   loadMoonModel(scene);
   loadCarouselModel(scene);
-  addMoonLighting();
-  createGroundPlane();
+  createGroundPlane(scene);
   loadChristmasTreeModel(scene);
   loadChristmasGifts(scene);
   loadLogCabinModel(scene);
-
   animate();
 }
 
