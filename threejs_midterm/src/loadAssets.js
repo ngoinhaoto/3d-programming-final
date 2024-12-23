@@ -149,7 +149,7 @@ function loadDeerModel(scene) {
   );
 }
 
-function loadLogCabinModel(scene) {
+function loadLogCabinModel(scene, callback) {
   const loader = new GLTFLoader();
   loader.load(
     "/assets/log_cabin_free_download/scene.gltf", // Path to the log cabin model
@@ -163,6 +163,11 @@ function loadLogCabinModel(scene) {
       applyTexturesToCabin(gltf.scene);
 
       console.log("Log cabin model loaded successfully!");
+
+      // Call the callback function with the loaded cabin
+      if (callback) {
+        callback(gltf.scene);
+      }
     },
     (xhr) => {
       console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -214,8 +219,28 @@ function updateGiftsEmissiveColor(scene, clock) {
     });
   }
 }
+function loadBeachModel(scene) {
+  const loader = new GLTFLoader();
+  loader.load(
+    "/assets/beach.glb", // Path to the beach model
+    (gltf) => {
+      // Scale and position the beach model
+      gltf.scene.scale.set(1, 1, 1); // Adjust size if needed
+      gltf.scene.position.set(0, 0, 0); // Position the beach at desired location
 
+      const beach = gltf.scene;
+      scene.add(beach);
+    },
+    (xhr) => {
+      console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+    },
+    (error) => {
+      console.error("An error occurred while loading the GLB file:", error);
+    },
+  );
+}
 export {
+  loadBeachModel,
   loadCarouselModel,
   loadMoonModel,
   loadChristmasTreeModel,

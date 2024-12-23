@@ -29,10 +29,10 @@ export function toggleMusic(button) {
 
   if (isPlaying) {
     sound.stop(); // Stop the music
-    button.textContent = "Play Music 🎵"; // Update button text
+    button.textContent = "Play Music 🎵";
   } else {
     sound.play(); // Play the music
-    button.textContent = "Stop Music 🔇"; // Update button text
+    button.textContent = "Pause Music ⏸️";
   }
   isPlaying = !isPlaying;
 }
