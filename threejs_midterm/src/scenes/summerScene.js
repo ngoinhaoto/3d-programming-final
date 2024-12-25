@@ -8,11 +8,9 @@ import {
   moveRight,
   moveUp,
   moveDown,
-  movementSpeed,
 } from "../controls.js";
 
 let controls;
-const summerMovementSpeed = 0.1; // Define movement speed for summer scene
 
 export function setupSummerScene(scene, camera, renderer) {
   scene.fog = new THREE.Fog(0x87ceeb, 0, 500); // Add fog to simulate atmosphere
@@ -46,6 +44,8 @@ export function setupSummerScene(scene, camera, renderer) {
 }
 
 export function updateSummerScene(scene, clock, controls, camera) {
+  const summerMovementSpeed = 0.1;
+  console.log("update summer");
   controls.update();
 
   const direction = new THREE.Vector3();
@@ -65,9 +65,6 @@ export function updateSummerScene(scene, clock, controls, camera) {
   if (moveUp) camera.position.y += summerMovementSpeed;
   if (moveDown) camera.position.y -= summerMovementSpeed;
 
-  // Add any additional update logic here
-
-  // Example: Rotate the beach model slowly
   const beach = scene.getObjectByName("beach");
   if (beach) {
     beach.rotation.y += 0.01;

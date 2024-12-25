@@ -21,7 +21,6 @@ import {
   moveRight,
   moveUp,
   moveDown,
-  movementSpeed,
 } from "../controls.js";
 import { setupSummerScene, updateSummerScene } from "./summerScene";
 
@@ -29,6 +28,7 @@ let particles;
 let spongebob;
 let controls;
 let cabin;
+let updateScene; // Declare updateScene as a global variable
 const winterMovementSpeed = 0.5; // Define movement speed for winter scene
 
 export function setupWinterScene(scene, camera, renderer) {
@@ -139,39 +139,28 @@ function loadSpongebobModel(scene) {
 }
 
 function checkCollisionWithCabin(camera, cabin) {
-  const cameraBox = new THREE.Box3().setFromObject(camera);
+  const cameraBox = new THREE.Box3().setFromCenterAndSize(
+    camera.position,
+    new THREE.Vector3(1, 1, 1), // Adjust the size of the bounding box as needed
+  );
   const cabinBox = new THREE.Box3().setFromObject(cabin);
+
+  console.log("Camera Box:", cameraBox);
+  console.log("Cabin Box:", cabinBox);
 
   return cameraBox.intersectsBox(cabinBox);
 }
 
-function transitionToSummer(scene, camera, renderer) {
-  const overlay = document.createElement("div");
-  overlay.style.position = "fixed";
-  overlay.style.top = "0";
-  overlay.style.left = "0";
-  overlay.style.width = "100%";
-  overlay.style.height = "100%";
-  overlay.style.backgroundColor = "black";
-  overlay.style.opacity = "0";
-  overlay.style.transition = "opacity 1s";
-  document.body.appendChild(overlay);
-
-  overlay.style.opacity = "1";
-
-  setTimeout(() => {
-    scene.clear();
-    ({ controls, particles } = setupSummerScene(scene, camera, renderer));
-    updateScene = updateSummerScene;
-
-    overlay.style.opacity = "0";
-    setTimeout(() => {
-      document.body.removeChild(overlay);
-    }, 1000);
-  }, 1000);
+export function switchToSummerScene(scene, camera, renderer) {
+  scene.clear();
+  renderer.clear();
+  const { controls, particles } = setupSummerScene(scene, camera, renderer);
+  window.season = "summer";
+  window.updateScene = (scene, clock, controls, camera) =>
+    updateSummerScene(scene, clock, controls, camera, renderer); // Set updateScene to updateSummerScene
 }
 
-export function updateWinterScene(scene, clock, controls, camera) {
+export function updateWinterScene(scene, clock, controls, camera, renderer) {
   controls.update();
 
   const direction = new THREE.Vector3();
@@ -179,6 +168,7 @@ export function updateWinterScene(scene, clock, controls, camera) {
   direction.y = 0; // Ignore vertical movement for forward/backward
   direction.normalize();
 
+  console.log("update winter scene");
   const right = new THREE.Vector3();
   right.crossVectors(camera.up, direction).normalize();
 
@@ -186,8 +176,8 @@ export function updateWinterScene(scene, clock, controls, camera) {
     camera.position.addScaledVector(direction, winterMovementSpeed);
   if (moveBackward)
     camera.position.addScaledVector(direction, -winterMovementSpeed);
-  if (moveLeft) camera.position.addScaledVector(right, -winterMovementSpeed);
-  if (moveRight) camera.position.addScaledVector(right, winterMovementSpeed);
+  if (moveLeft) camera.position.addScaledVector(right, winterMovementSpeed);
+  if (moveRight) camera.position.addScaledVector(right, -winterMovementSpeed);
   if (moveUp) camera.position.y += winterMovementSpeed;
   if (moveDown) camera.position.y -= winterMovementSpeed;
 
@@ -204,11 +194,15 @@ export function updateWinterScene(scene, clock, controls, camera) {
     makeRoughGround(planeMesh);
   }
 
+  // Check for collision with the cabin
   if (cabin) {
     console.log("Checking collision with cabin...");
     if (checkCollisionWithCabin(camera, cabin)) {
       console.log("COLLIDED WITH CABIN");
-      transitionToSummer(scene, camera, renderer);
+      // Stop updating the winter scene
+      updateScene = () => {};
+      // Switch to summer scene
+      switchToSummerScene(scene, camera, renderer);
     }
   } else {
     console.log("Cabin is not defined");
