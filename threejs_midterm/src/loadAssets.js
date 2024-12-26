@@ -1,5 +1,6 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { createFire } from "./fireEffect";
 
 function loadCarouselModel(scene) {
   const loader = new GLTFLoader();
@@ -239,7 +240,38 @@ function loadBeachModel(scene) {
     },
   );
 }
+
+function loadCampfireModel(scene) {
+  const loader = new GLTFLoader();
+  loader.load(
+    "/assets/camp_fire.glb", // Path to the campfire model
+    (gltf) => {
+      // Scale and position the campfire model
+      gltf.scene.scale.set(0.007, 0.007, 0.007); // Adjust size if needed
+      gltf.scene.position.set(-1.5, 2.8, 8); // Position the campfire at desired location
+
+      gltf.scene.name = "CampFire"; // Name the campfire model
+
+      const campfire = gltf.scene;
+      scene.add(campfire);
+
+      // Add fire effect to the campfire
+      const fire = createFire(scene, new THREE.Vector3(-1.5, 0.5, 8)); // Adjust position as needed
+      campfire.userData.fire = fire;
+
+      console.log("Campfire model loaded successfully!");
+    },
+    (xhr) => {
+      console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+    },
+    (error) => {
+      console.error("An error occurred while loading the GLB file:", error);
+    },
+  );
+}
+
 export {
+  loadCampfireModel,
   loadBeachModel,
   loadCarouselModel,
   loadMoonModel,

@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { loadBeachModel } from "../loadAssets.js";
+import { loadBeachModel, loadCampfireModel } from "../loadAssets.js";
 import {
   moveForward,
   moveBackward,
@@ -9,8 +9,10 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
+import { createWater, updateWater } from "../waterEffect";
+import { updateFire } from "../fireEffect";
 
-let controls;
+let controls, water;
 
 export function setupSummerScene(scene, camera, renderer) {
   scene.fog = new THREE.Fog(0x87ceeb, 0, 500); // Add fog to simulate atmosphere
@@ -40,6 +42,12 @@ export function setupSummerScene(scene, camera, renderer) {
 
   loadBeachModel(scene); // Load the beach model
 
+  // Add water effect
+  water = createWater(scene, renderer);
+
+  // Add campfire model
+  loadCampfireModel(scene);
+
   return { controls, particles: null };
 }
 
@@ -68,5 +76,14 @@ export function updateSummerScene(scene, clock, controls, camera) {
   const beach = scene.getObjectByName("beach");
   if (beach) {
     beach.rotation.y += 0.01;
+  }
+
+  // Update water effect
+  updateWater(water, clock);
+
+  // Update fire effect
+  const campfire = scene.getObjectByName("CampFire");
+  if (campfire && campfire.userData.fire) {
+    updateFire(campfire.userData.fire);
   }
 }
