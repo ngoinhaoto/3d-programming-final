@@ -1,6 +1,10 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { loadBeachModel, loadCampfireModel } from "../loadAssets.js";
+import {
+  loadBeachModel,
+  loadCampfireModel,
+  loadSummerMoon,
+} from "../loadAssets.js";
 import {
   moveForward,
   moveBackward,
@@ -12,10 +16,10 @@ import {
 import { createWater, updateWater } from "../waterEffect";
 import { updateFire } from "../fireEffect";
 
-let controls, water;
+let controls, water, fireLight, spotlight, moonDirectionalLight;
 
 export function setupSummerScene(scene, camera, renderer) {
-  scene.fog = new THREE.Fog(0x87ceeb, 0, 500); // Add fog to simulate atmosphere
+  scene.fog = new THREE.Fog(0x000000, 0, 500); // Darker fog for a darker scene
 
   camera.position.set(0, 3, 10); // Adjust the initial camera position
 
@@ -23,7 +27,19 @@ export function setupSummerScene(scene, camera, renderer) {
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.setClearColor(new THREE.Color(0x87ceeb));
+  renderer.shadowMap.enabled = true; // Enable shadow maps
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadow map
+
+  const loader = new THREE.TextureLoader();
+  const texture = loader.load("/assets/night_sky.png"); // Replace with your night sky texture path
+  const skyboxGeometry = new THREE.SphereGeometry(300, 60, 40); // Reduce size for larger details
+  const skyboxMaterial = new THREE.MeshBasicMaterial({
+    map: texture,
+    side: THREE.BackSide,
+  });
+  const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial);
+  scene.add(skybox);
+
   document.body.appendChild(renderer.domElement);
 
   controls = new PointerLockControls(camera, document.body);
@@ -33,12 +49,38 @@ export function setupSummerScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  // Add lighting specific to the summer scene
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75); // Soft ambient light
+  // Add ambient light for overall illumination
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
 
-  const hemisphereLight = new THREE.HemisphereLight(0xffffbb, 0x080820, 1); // Light from the sky and ground
+  // Add hemisphere light to simulate natural light from the sky and ground
+  const hemisphereLight = new THREE.HemisphereLight(0x444444, 0x080820, 0.8); // Increase hemisphere light intensity
   scene.add(hemisphereLight);
+
+  moonDirectionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+  moonDirectionalLight.position.set(0, 150, -200);
+  moonDirectionalLight.target.position.set(0, 0, 0);
+  moonDirectionalLight.castShadow = true;
+  moonDirectionalLight.shadow.mapSize.width = 2048;
+  moonDirectionalLight.shadow.mapSize.height = 2048;
+  moonDirectionalLight.shadow.camera.near = 0.5;
+  moonDirectionalLight.shadow.camera.far = 500;
+  moonDirectionalLight.shadow.camera.left = -200;
+  moonDirectionalLight.shadow.camera.right = 200;
+  moonDirectionalLight.shadow.camera.top = 200;
+  moonDirectionalLight.shadow.camera.bottom = -200;
+  scene.add(moonDirectionalLight);
+  scene.add(moonDirectionalLight.target);
+
+  // Add spotlight to highlight specific areas
+  spotlight = new THREE.SpotLight(0xffffff, 1.2); // Increase spotlight intensity
+  spotlight.position.set(10, 20, 10); // Position the spotlight
+  spotlight.angle = Math.PI / 6; // Set the spotlight angle
+  spotlight.penumbra = 0.1; // Set the spotlight penumbra
+  spotlight.decay = 2; // Set the spotlight decay
+  spotlight.distance = 200; // Set the spotlight distance
+  spotlight.castShadow = true; // Enable shadows
+  scene.add(spotlight);
 
   loadBeachModel(scene); // Load the beach model
 
@@ -47,6 +89,14 @@ export function setupSummerScene(scene, camera, renderer) {
 
   // Add campfire model
   loadCampfireModel(scene);
+
+  // Add moon model
+  loadSummerMoon(scene);
+
+  // Add point light at the fire's position
+  fireLight = new THREE.PointLight(0xffaa00, 10, 100); // Warm light color, intensity, and distance
+  fireLight.position.set(-1.5, 2.8, 8); // Initial position, will be updated in updateSummerScene
+  scene.add(fireLight);
 
   return { controls, particles: null };
 }
@@ -85,5 +135,8 @@ export function updateSummerScene(scene, clock, controls, camera) {
   const campfire = scene.getObjectByName("CampFire");
   if (campfire && campfire.userData.fire) {
     updateFire(campfire.userData.fire);
+
+    // Update fire light position to match the fire
+    fireLight.position.copy(campfire.userData.fire.position);
   }
 }

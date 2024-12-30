@@ -56,7 +56,7 @@ export function setupWinterScene(scene, camera, renderer) {
 
   const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5); // Light from the sky and ground
   scene.add(hemisphereLight);
-  const warmLight = new THREE.DirectionalLight(0xffbb06, 50); // Warm orange light
+  const warmLight = new THREE.DirectionalLight(0xffbb06, 40); // Warm orange light
   warmLight.position.set(0, 150, 0);
   warmLight.castShadow = true;
   warmLight.shadow.camera.near = 0.1;

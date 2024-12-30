@@ -24,28 +24,77 @@ function loadCarouselModel(scene) {
     },
   );
 }
-
 function loadMoonModel(scene) {
   const loader = new GLTFLoader();
   loader.load(
     "/assets/our_moon/scene.gltf", // Path to the moon model
     (gltf) => {
-      gltf.scene.scale.set(5, 5, 5); // Adjust size if needed
-      gltf.scene.position.set(0, 125, -125); // Position the moon in the scene
+      const moon = gltf.scene;
+      moon.scale.set(5, 5, 5); // Adjust size if needed
+      moon.position.set(0, 200, -200); // Position the moon in the scene
 
       // Apply the texture to the moon
       const textureLoader = new THREE.TextureLoader();
       const texture = textureLoader.load(
-        "our_moon/textures/lroc_color_poles_16k_baseColor.jpeg",
+        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg",
       );
-      gltf.scene.traverse((child) => {
+      moon.traverse((child) => {
         if (child.isMesh) {
           child.material.map = texture; // Apply texture to the moon surface
+          child.material.emissive = new THREE.Color(0x888888); // Make the moon emit a soft, cool light
+          child.material.emissiveIntensity = 0.3; // Adjust the intensity of the emissive light
           child.material.needsUpdate = true;
         }
       });
 
-      scene.add(gltf.scene);
+      // Add a directional light to simulate moonlight
+      const moonLight = new THREE.DirectionalLight(0x8888ff, 0.5); // Soft, cool moonlight color and intensity
+      moonLight.position.set(0, 200, -200); // Position the light above and behind the scene
+      moonLight.target.position.set(0, 0, 0); // Point the light towards the center of the scene
+      scene.add(moonLight);
+      scene.add(moonLight.target);
+
+      scene.add(moon);
+      console.log("Moon model loaded successfully!");
+    },
+    (xhr) => {
+      console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
+    },
+    (error) => {
+      console.error("An error occurred while loading the GLTF file:", error);
+    },
+  );
+}
+
+function loadSummerMoon(scene) {
+  const loader = new GLTFLoader();
+  loader.load(
+    "/assets/our_moon/scene.gltf", // Path to the moon model
+    (gltf) => {
+      const moon = gltf.scene;
+      moon.scale.set(8, 8, 8); // Adjust size if needed
+      moon.position.set(0, 200, -200); // Position the moon in the scene
+
+      const textureLoader = new THREE.TextureLoader();
+      const texture = textureLoader.load(
+        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg",
+      );
+      moon.traverse((child) => {
+        if (child.isMesh) {
+          child.material.map = texture;
+          child.material.emissive = new THREE.Color(0x888888); // Make the moon emit a soft, cool light
+          child.material.emissiveIntensity = 0.7; // Adjust the intensity of the emissive light
+          child.material.needsUpdate = true;
+        }
+      });
+
+      const moonLight = new THREE.DirectionalLight(0x8888ff, 0.1); // Soft, cool moonlight color and intensity
+      moonLight.position.set(0, 200, -200);
+      moonLight.target.position.set(0, 0, 0);
+      scene.add(moonLight);
+      scene.add(moonLight.target);
+
+      scene.add(moon);
       console.log("Moon model loaded successfully!");
     },
     (xhr) => {
@@ -256,7 +305,7 @@ function loadCampfireModel(scene) {
       scene.add(campfire);
 
       // Add fire effect to the campfire
-      const fire = createFire(scene, new THREE.Vector3(-1.5, 0.5, 8)); // Adjust position as needed
+      const fire = createFire(scene, new THREE.Vector3(-1.6, 2.65, 8)); // Adjust position as needed
       campfire.userData.fire = fire;
 
       console.log("Campfire model loaded successfully!");
@@ -274,6 +323,7 @@ export {
   loadCampfireModel,
   loadBeachModel,
   loadCarouselModel,
+  loadSummerMoon,
   loadMoonModel,
   loadChristmasTreeModel,
   loadChristmasGifts,
