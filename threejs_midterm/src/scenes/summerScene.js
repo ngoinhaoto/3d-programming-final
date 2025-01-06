@@ -37,7 +37,7 @@ export function setupSummerScene(scene, camera, renderer) {
   renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadow map
 
   const loader = new THREE.TextureLoader();
-  const texture = loader.load("/assets/night_sky.png"); // Replace with your night sky texture path
+  const texture = loader.load("/assets/night_sky.png");
   const skyboxGeometry = new THREE.SphereGeometry(300, 60, 40); // Reduce size for larger details
   const skyboxMaterial = new THREE.MeshBasicMaterial({
     map: texture,
