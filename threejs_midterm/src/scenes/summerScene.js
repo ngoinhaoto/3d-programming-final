@@ -16,6 +16,12 @@ import {
 import { createWater, updateWater } from "../waterEffect";
 import { updateFire } from "../fireEffect";
 
+import {
+  preloadBackgroundMusic,
+  stopBackgroundMusic,
+} from "../backgroundMusic";
+import { preloadSoundEffect, stopSoundEffect } from "../soundEffect.js";
+
 let controls, water, fireLight, spotlight, moonDirectionalLight;
 
 export function setupSummerScene(scene, camera, renderer) {
@@ -93,10 +99,12 @@ export function setupSummerScene(scene, camera, renderer) {
   // Add moon model
   loadSummerMoon(scene);
 
-  // Add point light at the fire's position
   fireLight = new THREE.PointLight(0xffaa00, 10, 100); // Warm light color, intensity, and distance
   fireLight.position.set(-1.5, 2.8, 8); // Initial position, will be updated in updateSummerScene
   scene.add(fireLight);
+
+  preloadBackgroundMusic(camera, "/assets/sleep_walk.mp3");
+  preloadSoundEffect(camera, "/assets/water.mp3");
 
   return { controls, particles: null };
 }

@@ -20,37 +20,66 @@
           #000046
         ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
-      #toggleMusicButton {
+      #toggleMusicButton,
+      #toggleSoundEffectButton {
         position: absolute;
         top: 20px;
-        right: 20px;
-        padding: 15px 30px;
-        background: linear-gradient(to bottom, #ff4444, #cc0000);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
         color: #fff;
-        font-size: 16px;
+        font-size: 24px;
         font-family: "Arial", sans-serif;
         border: 3px solid #fff;
-        border-radius: 50px;
         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
         cursor: pointer;
         transition: all 0.3s ease-in-out;
         z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #toggleMusicButton {
+        right: 80px;
+        background: linear-gradient(to bottom, #ff4444, #cc0000);
+      }
+
+      #toggleSoundEffectButton {
+        right: 20px;
+        background: linear-gradient(to bottom, #4444ff, #0000cc);
+      }
+
+      #toggleMusicButton:hover,
+      #toggleSoundEffectButton:hover {
+        transform: scale(1.1);
+      }
+
+      #toggleMusicButton:active,
+      #toggleSoundEffectButton:active {
+        transform: scale(1.05);
       }
 
       #toggleMusicButton:hover {
         background: linear-gradient(to bottom, #ff8888, #dd3333);
-        transform: scale(1.1);
+      }
+
+      #toggleSoundEffectButton:hover {
+        background: linear-gradient(to bottom, #8888ff, #3333dd);
       }
 
       #toggleMusicButton:active {
-        transform: scale(1.05);
         background: linear-gradient(to bottom, #ff4444, #cc0000);
+      }
+
+      #toggleSoundEffectButton:active {
+        background: linear-gradient(to bottom, #4444ff, #0000cc);
       }
     </style>
   </head>
   <body>
-    <!-- Add this div -->
-    <button id="toggleMusicButton">Play Music 🎵</button>
+    <button id="toggleMusicButton">🎵</button>
+    <button id="toggleSoundEffectButton">🔊</button>
     <script type="module" src="src/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
   </body>

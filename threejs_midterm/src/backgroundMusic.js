@@ -4,7 +4,7 @@ let sound; // Global variable to store the sound instance
 let isSoundReady = false; // Flag to indicate if the sound is preloaded
 let isPlaying = false;
 
-export function preloadBackgroundMusic(camera) {
+export function preloadBackgroundMusic(camera, audioPath) {
   const listener = new THREE.AudioListener();
   camera.add(listener);
 
@@ -12,7 +12,7 @@ export function preloadBackgroundMusic(camera) {
   const audioLoader = new THREE.AudioLoader();
 
   // Preload the audio buffer
-  audioLoader.load("/assets/music.mp3", (buffer) => {
+  audioLoader.load(audioPath, (buffer) => {
     sound.setBuffer(buffer);
     sound.setLoop(true);
     sound.setVolume(0.5);
@@ -29,10 +29,24 @@ export function toggleMusic(button) {
 
   if (isPlaying) {
     sound.stop(); // Stop the music
-    button.textContent = "Play Music 🎵";
+    button.textContent = "🔕"; // Change text to muted icon
   } else {
     sound.play(); // Play the music
-    button.textContent = "Pause Music ⏸️";
+    button.textContent = "🎵"; // Change text to music note
   }
   isPlaying = !isPlaying;
+}
+
+export function setMusicVolume(volume) {
+  if (sound) {
+    sound.setVolume(volume);
+  }
+}
+
+export function stopBackgroundMusic() {
+  if (sound && isPlaying) {
+    sound.stop();
+    isPlaying = false;
+    console.log("Background music stopped");
+  }
 }

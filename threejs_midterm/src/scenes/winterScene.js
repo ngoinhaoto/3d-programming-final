@@ -13,7 +13,13 @@ import {
 } from "../loadAssets.js";
 import { createSnowParticles, updateSnowParticles } from "../snowParticles.js";
 import { makeRoughGround, createGroundPlane } from "../snowGround.js";
-import { preloadBackgroundMusic } from "../backgroundMusic.js";
+import {
+  preloadBackgroundMusic,
+  stopBackgroundMusic,
+} from "../backgroundMusic.js";
+
+import { preloadSoundEffect, stopSoundEffect } from "../soundEffect.js";
+
 import {
   moveForward,
   moveBackward,
@@ -63,7 +69,8 @@ export function setupWinterScene(scene, camera, renderer) {
   warmLight.shadow.camera.far = 500; // Far plane for the shadow camera
   scene.add(warmLight);
 
-  preloadBackgroundMusic(camera); // Preload background music
+  preloadBackgroundMusic(camera, "/assets/winter_music.mp3");
+  preloadSoundEffect(camera, "/assets/street.mp3");
 
   loadLowPolyWinterScene(scene);
   particles = createSnowParticles(scene);
@@ -152,6 +159,8 @@ function checkCollisionWithCabin(camera, cabin) {
 }
 
 export function switchToSummerScene(scene, camera, renderer) {
+  stopBackgroundMusic();
+  stopSoundEffect();
   scene.clear();
   renderer.clear();
   const { controls, particles } = setupSummerScene(scene, camera, renderer);

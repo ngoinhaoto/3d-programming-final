@@ -8,6 +8,8 @@ import {
 import { updateSummerScene, setupSummerScene } from "./scenes/summerScene";
 import { toggleMusic } from "./backgroundMusic";
 
+import { toggleSoundEffect } from "./soundEffect";
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -17,7 +19,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "summer"; // Change this to switch between seasons
+window.season = "winter"; // Change this to switch between seasons
 let controls, particles;
 
 if (window.season === "winter") {
@@ -48,6 +50,12 @@ document
   .getElementById("toggleMusicButton")
   .addEventListener("click", function () {
     toggleMusic(this);
+  });
+
+document
+  .getElementById("toggleSoundEffectButton")
+  .addEventListener("click", function () {
+    toggleSoundEffect(this);
   });
 
 animate();
