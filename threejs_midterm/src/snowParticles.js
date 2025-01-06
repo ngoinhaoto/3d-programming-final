@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-const particleNum = 5000;
+const particleNum = 2000;
 const maxRange = 300;
 const minRange = maxRange / 2;
 const textureSize = 64.0;
@@ -21,7 +21,7 @@ const getTexture = () => {
     0,
     canvasRadius,
     canvasRadius,
-    canvasRadius,
+    canvasRadius
   );
   gradient.addColorStop(0, "rgba(255,255,255,1.0)");
   gradient.addColorStop(0.5, "rgba(255,255,255,0.5)");
@@ -52,7 +52,7 @@ const createSnowParticles = (scene) => {
 
   pointGeometry.setAttribute(
     "position",
-    new THREE.BufferAttribute(positions, 3),
+    new THREE.BufferAttribute(positions, 3)
   );
 
   const pointMaterial = new THREE.PointsMaterial({

@@ -56,24 +56,23 @@ export function setupWinterScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  // Add lighting specific to the winter scene
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75); // Soft ambient light
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75);
   scene.add(ambientLight);
 
-  const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5); // Light from the sky and ground
+  const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5);
   scene.add(hemisphereLight);
-  const warmLight = new THREE.DirectionalLight(0xffbb06, 40); // Warm orange light
+  const warmLight = new THREE.DirectionalLight(0xffbb06, 40);
   warmLight.position.set(0, 150, 0);
   warmLight.castShadow = true;
   warmLight.shadow.camera.near = 0.1;
-  warmLight.shadow.camera.far = 500; // Far plane for the shadow camera
+  warmLight.shadow.camera.far = 500;
   scene.add(warmLight);
 
   preloadBackgroundMusic(camera, "/assets/winter_music.mp3");
   preloadSoundEffect(camera, "/assets/street.mp3");
+  particles = createSnowParticles(scene);
 
   loadLowPolyWinterScene(scene);
-  particles = createSnowParticles(scene);
   loadDeerModel(scene);
   loadMoonModel(scene);
   loadCarouselModel(scene);
@@ -94,19 +93,19 @@ export function setupWinterScene(scene, camera, renderer) {
 let spongebobDirection = new THREE.Vector3(
   (Math.random() - 0.5) * 2,
   0,
-  (Math.random() - 0.5) * 2,
+  (Math.random() - 0.5) * 2
 ).normalize();
 
 function moveSpongebobSporadically() {
   if (spongebob) {
-    spongebob.position.addScaledVector(spongebobDirection, 0.4); // Adjust the movement speed
+    spongebob.position.addScaledVector(spongebobDirection, 0.1); // Adjust the movement speed
 
     // Change direction randomly
     if (Math.random() < 0.01) {
       spongebobDirection = new THREE.Vector3(
         (Math.random() - 0.5) * 2,
         0,
-        (Math.random() - 0.5) * 2,
+        (Math.random() - 0.5) * 2
       ).normalize();
     }
 
@@ -128,32 +127,25 @@ function loadSpongebobModel(scene) {
     (gltf) => {
       spongebob = gltf.scene;
 
-      console.log(gltf);
-
       spongebob.scale.set(25, 25, 25);
       spongebob.position.set(10, -3, 10);
       scene.add(spongebob);
-
-      console.log("Spongebob Xmas model loaded successfully!");
     },
     (xhr) => {
       console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
 function checkCollisionWithCabin(camera, cabin) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(
     camera.position,
-    new THREE.Vector3(1, 1, 1), // Adjust the size of the bounding box as needed
+    new THREE.Vector3(1, 1, 1) // Adjust the size of the bounding box as needed
   );
   const cabinBox = new THREE.Box3().setFromObject(cabin);
-
-  console.log("Camera Box:", cameraBox);
-  console.log("Cabin Box:", cabinBox);
 
   return cameraBox.intersectsBox(cabinBox);
 }
@@ -205,7 +197,6 @@ export function updateWinterScene(scene, clock, controls, camera, renderer) {
 
   // Check for collision with the cabin
   if (cabin) {
-    console.log("Checking collision with cabin...");
     if (checkCollisionWithCabin(camera, cabin)) {
       console.log("COLLIDED WITH CABIN");
       // Stop updating the winter scene

@@ -5,25 +5,39 @@ import { createFire } from "./fireEffect";
 function loadCarouselModel(scene) {
   const loader = new GLTFLoader();
   loader.load(
-    "/assets/christmas_carousel/scene.gltf", // Path to the carousel model
+    "/assets/christmas_carousel.glb",
     (gltf) => {
-      gltf.scene.scale.set(5, 5, 5); // Adjust size if needed
-      gltf.scene.position.set(-100, -3, -10); // Position carousel at desired location
+      gltf.scene.scale.set(5, 5, 5);
+      gltf.scene.position.set(-100, -3, -10);
 
       gltf.scene.name = "carousel";
 
       scene.add(gltf.scene);
 
       console.log("Christmas carousel model loaded successfully!");
+
+      const mixer = new THREE.AnimationMixer(gltf.scene);
+      gltf.animations.forEach((clip) => {
+        mixer.clipAction(clip).play();
+      });
+
+      const clock = new THREE.Clock();
+      function animate() {
+        requestAnimationFrame(animate);
+        const delta = clock.getDelta();
+        mixer.update(delta);
+      }
+      animate();
     },
     (xhr) => {
       console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
+
 function loadMoonModel(scene) {
   const loader = new GLTFLoader();
   loader.load(
@@ -36,7 +50,7 @@ function loadMoonModel(scene) {
       // Apply the texture to the moon
       const textureLoader = new THREE.TextureLoader();
       const texture = textureLoader.load(
-        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg",
+        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg"
       );
       moon.traverse((child) => {
         if (child.isMesh) {
@@ -62,7 +76,7 @@ function loadMoonModel(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -77,7 +91,7 @@ function loadSummerMoon(scene) {
 
       const textureLoader = new THREE.TextureLoader();
       const texture = textureLoader.load(
-        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg",
+        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg"
       );
       moon.traverse((child) => {
         if (child.isMesh) {
@@ -102,7 +116,7 @@ function loadSummerMoon(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -123,7 +137,7 @@ function loadChristmasTreeModel(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -153,7 +167,7 @@ function loadChristmasGifts(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -173,7 +187,7 @@ function loadLowPolyWinterScene(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -195,7 +209,7 @@ function loadDeerModel(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -224,7 +238,7 @@ function loadLogCabinModel(scene, callback) {
     },
     (error) => {
       console.error("An error occurred while loading the GLTF file:", error);
-    },
+    }
   );
 }
 
@@ -236,13 +250,13 @@ function applyTexturesToCabin(cabin) {
     if (child.isMesh) {
       if (child.name === "logs" || child.name.includes("log")) {
         const baseColorTexture = textureLoader.load(
-          "log_cabin_free_download/textures/Logs.001_baseColor.jpeg",
+          "log_cabin_free_download/textures/Logs.001_baseColor.jpeg"
         );
         const normalTexture = textureLoader.load(
-          "log_cabin_free_download/textures/Logs.001_normal.png",
+          "log_cabin_free_download/textures/Logs.001_normal.png"
         );
         const metallicRoughnessTexture = textureLoader.load(
-          "log_cabin_free_download/textures/Logs.001_metallicRoughness.png",
+          "log_cabin_free_download/textures/Logs.001_metallicRoughness.png"
         );
 
         child.material.map = baseColorTexture;
@@ -262,7 +276,7 @@ function updateGiftsEmissiveColor(scene, clock) {
         const emissiveColor = new THREE.Color().lerpColors(
           new THREE.Color(0xffc606), // Yellow
           new THREE.Color(0xff4500), // Orange-Red
-          t,
+          t
         );
         child.material.emissive = emissiveColor;
       }
@@ -286,7 +300,7 @@ function loadBeachModel(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLB file:", error);
-    },
+    }
   );
 }
 
@@ -315,7 +329,7 @@ function loadCampfireModel(scene) {
     },
     (error) => {
       console.error("An error occurred while loading the GLB file:", error);
-    },
+    }
   );
 }
 

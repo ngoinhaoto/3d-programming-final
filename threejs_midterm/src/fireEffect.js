@@ -33,15 +33,15 @@ export function createFire(scene, position) {
 
   fireGeometry.setAttribute(
     "position",
-    new THREE.BufferAttribute(firePositions, 3),
+    new THREE.BufferAttribute(firePositions, 3)
   );
   fireGeometry.setAttribute(
     "velocity",
-    new THREE.BufferAttribute(fireVelocities, 1),
+    new THREE.BufferAttribute(fireVelocities, 1)
   );
   fireGeometry.setAttribute(
     "height",
-    new THREE.BufferAttribute(fireHeights, 1),
+    new THREE.BufferAttribute(fireHeights, 1)
   );
   fireGeometry.setAttribute("color", new THREE.BufferAttribute(fireColors, 3));
 
