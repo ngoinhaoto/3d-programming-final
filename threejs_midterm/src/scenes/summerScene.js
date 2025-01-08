@@ -28,23 +28,29 @@ import {
   BloomEffect,
 } from "postprocessing";
 
-let controls, water, fireLight, spotlight, moonDirectionalLight, composer;
+let controls,
+  water,
+  fireLight,
+  spotlight,
+  moonDirectionalLight,
+  composer,
+  fireflies;
 
 export function setupSummerScene(scene, camera, renderer) {
-  scene.fog = new THREE.Fog(0x000000, 0, 500); // Darker fog for a darker scene
+  scene.fog = new THREE.Fog(0x000000, 0, 500);
 
-  camera.position.set(0, 3, 10); // Adjust the initial camera position
+  camera.position.set(0, 3, 10);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 1.0;
   renderer.outputEncoding = THREE.sRGBEncoding;
-  renderer.shadowMap.enabled = true; // Enable shadow maps
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadow map
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   const loader = new THREE.TextureLoader();
   const texture = loader.load("/assets/night_sky.png");
-  const skyboxGeometry = new THREE.SphereGeometry(300, 60, 40); // Reduce size for larger details
+  const skyboxGeometry = new THREE.SphereGeometry(400, 400, 400);
   const skyboxMaterial = new THREE.MeshBasicMaterial({
     map: texture,
     side: THREE.BackSide,
@@ -55,13 +61,28 @@ export function setupSummerScene(scene, camera, renderer) {
   document.body.appendChild(renderer.domElement);
 
   controls = new PointerLockControls(camera, document.body);
+  controls.pointerSpeed = 0.5;
+
   scene.add(controls.getObject());
 
   document.addEventListener("click", () => {
     controls.lock();
   });
 
-  // Add ambient light for overall illumination
+  const fireflyGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+  const fireflyMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+  fireflies = [];
+  for (let i = 0; i < 50; i++) {
+    const firefly = new THREE.Mesh(fireflyGeometry, fireflyMaterial);
+    firefly.position.set(
+      Math.random() * 50 - 25,
+      Math.random() * 10 + 5,
+      Math.random() * 50 - 25
+    );
+    scene.add(firefly);
+    fireflies.push(firefly);
+  }
+
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
 
@@ -160,6 +181,11 @@ export function updateSummerScene(scene, clock, controls, camera) {
     // Update fire light position to match the fire
     fireLight.position.copy(campfire.userData.fire.position);
   }
+  fireflies.forEach((firefly) => {
+    firefly.position.x += Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
+    firefly.position.y += Math.cos(clock.getElapsedTime() * 0.5) * 0.01;
+    firefly.position.z += Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
+  });
 
   // Update comets
   updateComets();

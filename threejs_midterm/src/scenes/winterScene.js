@@ -4,6 +4,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
   loadCarouselModel,
   loadMoonModel,
+  loadSummerMoon,
   loadChristmasTreeModel,
   loadChristmasGifts,
   loadLowPolyWinterScene,
@@ -29,15 +30,18 @@ import {
   moveDown,
 } from "../controls.js";
 import { setupSummerScene, updateSummerScene } from "./summerScene";
+import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
 
 let particles;
 let spongebob;
 let controls;
 let cabin;
+let planeMesh;
+let clouds;
 let updateScene; // Declare updateScene as a global variable
 const winterMovementSpeed = 0.5; // Define movement speed for winter scene
 
-export function setupWinterScene(scene, camera, renderer) {
+export function setupWinterScene(scene, camera, renderer, callback) {
   scene.fog = new THREE.Fog(0x000036, 0, 500); // Add fog to simulate atmosphere
 
   camera.position.set(0, 10, 30); // Adjust the initial camera position
@@ -56,17 +60,11 @@ export function setupWinterScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75); // Soft ambient light
   scene.add(ambientLight);
 
-  const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5);
+  const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5); // Light from the sky and ground
   scene.add(hemisphereLight);
-  const warmLight = new THREE.DirectionalLight(0xffbb06, 40);
-  warmLight.position.set(0, 150, 0);
-  warmLight.castShadow = true;
-  warmLight.shadow.camera.near = 0.1;
-  warmLight.shadow.camera.far = 500;
-  scene.add(warmLight);
 
   preloadBackgroundMusic(camera, "/assets/winter_music.mp3");
   preloadSoundEffect(camera, "/assets/street.mp3");
@@ -74,7 +72,7 @@ export function setupWinterScene(scene, camera, renderer) {
 
   loadLowPolyWinterScene(scene);
   loadDeerModel(scene);
-  loadMoonModel(scene);
+  loadMoonModel(scene, camera, renderer); // Pass camera and renderer to loadMoonModel
   loadCarouselModel(scene);
   createGroundPlane(scene);
   loadChristmasTreeModel(scene);
@@ -86,6 +84,30 @@ export function setupWinterScene(scene, camera, renderer) {
   });
 
   loadSpongebobModel(scene);
+
+  const cloudTexture = new THREE.TextureLoader().load(CLOUD_URL);
+  clouds = new Clouds({ texture: cloudTexture, frustumCulled: false });
+  scene.add(clouds);
+
+  for (let i = 0; i < 5; i++) {
+    const cloud = new Cloud({ fade: 1, growth: 1.5, speed: 1 });
+    cloud.color.set("#ffffff");
+    cloud.position.set(
+      Math.random() * 300 - 300,
+      Math.random() * 50 + 300,
+      Math.random() * 300 - 300
+    );
+    cloud.scale.set(
+      Math.random() * 10 + 24,
+      Math.random() * 5 + 24,
+      Math.random() * 10 + 24
+    );
+    cloud.growth = Math.random() * 0.5 + 0.5;
+    cloud.speed = Math.random() * 0.5 + 0.5;
+
+    console.log("cloud texture", CLOUD_URL);
+    clouds.add(cloud);
+  }
 
   return { controls, particles };
 }
@@ -169,7 +191,6 @@ export function updateWinterScene(scene, clock, controls, camera, renderer) {
   direction.y = 0; // Ignore vertical movement for forward/backward
   direction.normalize();
 
-  console.log("update winter scene");
   const right = new THREE.Vector3();
   right.crossVectors(camera.up, direction).normalize();
 
@@ -190,10 +211,12 @@ export function updateWinterScene(scene, clock, controls, camera, renderer) {
     updateSnowParticles(particles);
   }
 
-  const planeMesh = scene.children.find((child) => child instanceof THREE.Mesh);
   if (planeMesh) {
     makeRoughGround(planeMesh);
   }
+
+  // Update clouds
+  clouds.update(camera, clock.getElapsedTime(), clock.getDelta());
 
   // Check for collision with the cabin
   if (cabin) {

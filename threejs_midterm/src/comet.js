@@ -20,7 +20,7 @@ export function createComets(scene, composer) {
     comet.position.set(
       Math.random() * 100 - 50,
       Math.random() * 100 - 20,
-      Math.random() * 100 - 50,
+      Math.random() * 100 - 50
     );
     scene.add(comet);
     comets.push(comet);
@@ -92,7 +92,7 @@ export function updateComets() {
       comet.position.set(
         -50,
         Math.random() * 100 - 50,
-        Math.random() * 100 - 50,
+        Math.random() * 100 - 50
       );
 
       for (let i = 0; i < positions.length; i += 3) {

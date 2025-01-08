@@ -41,29 +41,14 @@ function loadCarouselModel(scene) {
 function loadMoonModel(scene) {
   const loader = new GLTFLoader();
   loader.load(
-    "/assets/our_moon/scene.gltf", // Path to the moon model
+    "/assets/moon.glb", // Path to the new moon model
     (gltf) => {
       const moon = gltf.scene;
-      moon.scale.set(5, 5, 5); // Adjust size if needed
-      moon.position.set(0, 200, -200); // Position the moon in the scene
+      moon.scale.set(3, 3, 3);
+      moon.position.set(0, 200, -200);
 
-      // Apply the texture to the moon
-      const textureLoader = new THREE.TextureLoader();
-      const texture = textureLoader.load(
-        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg"
-      );
-      moon.traverse((child) => {
-        if (child.isMesh) {
-          child.material.map = texture; // Apply texture to the moon surface
-          child.material.emissive = new THREE.Color(0x888888); // Make the moon emit a soft, cool light
-          child.material.emissiveIntensity = 0.3; // Adjust the intensity of the emissive light
-          child.material.needsUpdate = true;
-        }
-      });
-
-      // Add a directional light to simulate moonlight
-      const moonLight = new THREE.DirectionalLight(0x8888ff, 0.5); // Soft, cool moonlight color and intensity
-      moonLight.position.set(0, 200, -200); // Position the light above and behind the scene
+      const moonLight = new THREE.DirectionalLight(0xffbb66, 20);
+      moonLight.position.set(0, 200, -200);
       moonLight.target.position.set(0, 0, 0); // Point the light towards the center of the scene
       scene.add(moonLight);
       scene.add(moonLight.target);
@@ -79,37 +64,41 @@ function loadMoonModel(scene) {
     }
   );
 }
-
-function loadSummerMoon(scene) {
+import {
+  BloomEffect,
+  EffectComposer,
+  EffectPass,
+  RenderPass,
+} from "postprocessing";
+function loadSummerMoon(scene, composer) {
   const loader = new GLTFLoader();
   loader.load(
-    "/assets/our_moon/scene.gltf", // Path to the moon model
+    "/assets/rocket_orbiting_moon.glb", // Path to the new moon model
     (gltf) => {
       const moon = gltf.scene;
-      moon.scale.set(8, 8, 8); // Adjust size if needed
-      moon.position.set(0, 200, -200); // Position the moon in the scene
+      moon.scale.set(0.4, 0.4, 0.4); // Adjust size if needed
+      moon.position.set(0, 200, -100); // Position the moon in the scene
 
-      const textureLoader = new THREE.TextureLoader();
-      const texture = textureLoader.load(
-        "/assets/our_moon/textures/lroc_color_poles_16k_baseColor.jpeg"
-      );
+      // Add emissive material to the moon
       moon.traverse((child) => {
         if (child.isMesh) {
-          child.material.map = texture;
-          child.material.emissive = new THREE.Color(0x888888); // Make the moon emit a soft, cool light
-          child.material.emissiveIntensity = 0.7; // Adjust the intensity of the emissive light
-          child.material.needsUpdate = true;
+          child.material.emissive = new THREE.Color(0xffffff);
+          child.material.emissiveIntensity = 20;
         }
       });
 
-      const moonLight = new THREE.DirectionalLight(0x8888ff, 0.1); // Soft, cool moonlight color and intensity
-      moonLight.position.set(0, 200, -200);
-      moonLight.target.position.set(0, 0, 0);
-      scene.add(moonLight);
-      scene.add(moonLight.target);
-
       scene.add(moon);
       console.log("Moon model loaded successfully!");
+
+      const renderPass = new RenderPass(scene, composer.camera);
+      const bloomEffect = new BloomEffect({
+        intensity: 50, // Increase the intensity of the bloom effect
+        luminanceThreshold: 0.1,
+        luminanceSmoothing: 0.9,
+      });
+      const effectPass = new EffectPass(composer.camera, bloomEffect);
+      composer.addPass(renderPass);
+      composer.addPass(effectPass);
     },
     (xhr) => {
       console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -119,7 +108,6 @@ function loadSummerMoon(scene) {
     }
   );
 }
-
 function loadChristmasTreeModel(scene) {
   const loader = new GLTFLoader();
   loader.load(
