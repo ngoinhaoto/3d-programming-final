@@ -15,14 +15,20 @@ import {
 } from "../controls.js";
 import { createWater, updateWater } from "../waterEffect";
 import { updateFire } from "../fireEffect";
-
 import {
   preloadBackgroundMusic,
   stopBackgroundMusic,
 } from "../backgroundMusic";
 import { preloadSoundEffect, stopSoundEffect } from "../soundEffect.js";
+import { createComets, updateComets } from "../comet.js";
+import {
+  EffectComposer,
+  RenderPass,
+  EffectPass,
+  BloomEffect,
+} from "postprocessing";
 
-let controls, water, fireLight, spotlight, moonDirectionalLight;
+let controls, water, fireLight, spotlight, moonDirectionalLight, composer;
 
 export function setupSummerScene(scene, camera, renderer) {
   scene.fog = new THREE.Fog(0x000000, 0, 500); // Darker fog for a darker scene
@@ -106,6 +112,13 @@ export function setupSummerScene(scene, camera, renderer) {
   preloadBackgroundMusic(camera, "/assets/sleep_walk.mp3");
   preloadSoundEffect(camera, "/assets/water.mp3");
 
+  // Create post-processing composer
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+
+  // Create comets
+  createComets(scene, composer);
+
   return { controls, particles: null };
 }
 
@@ -147,4 +160,10 @@ export function updateSummerScene(scene, clock, controls, camera) {
     // Update fire light position to match the fire
     fireLight.position.copy(campfire.userData.fire.position);
   }
+
+  // Update comets
+  updateComets();
+
+  // Render scene with post-processing
+  composer.render();
 }

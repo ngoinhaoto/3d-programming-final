@@ -11,12 +11,16 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        background: linear-gradient(to bottom, #1e3c72, #2a5298);
+        background: url("/assets/nature_start_2.gif") no-repeat center center
+          fixed;
+        background-size: cover;
         font-family: Arial, sans-serif;
       }
       #startButton {
+        width: 400px;
+        height: auto;
         cursor: pointer;
-        transition: transform 0.2s;
+        transition: all 0.3s ease-in-out;
       }
       #startButton:hover {
         transform: scale(1.1);
@@ -33,11 +37,7 @@
   </head>
   <body>
     <div id="startScreen">
-      <img
-        id="startButton"
-        src="assets/startgame-yellow.gif"
-        alt="Start Game"
-      />
+      <img id="startButton" src="assets/start_button.gif" alt="Start Game" />
     </div>
     <script>
       document.getElementById("startButton").addEventListener("click", () => {

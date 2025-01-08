@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { init } from "./init";
 import {
   updateWinterScene,
   setupWinterScene,
@@ -15,11 +14,11 @@ const camera = new THREE.PerspectiveCamera(
   75,
   window.innerWidth / window.innerHeight,
   0.1,
-  1000
+  1000,
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "summer"; // Change this to switch between seasons
+window.season = "winter"; // Change this to switch between seasons
 let controls, particles;
 
 if (window.season === "winter") {

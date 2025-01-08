@@ -20,20 +20,7 @@
           #000046
         ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
       }
-      /* #loadingOverlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        font-size: 24px;
-        z-index: 1000;
-      } */
+
       #toggleMusicButton,
       #toggleSoundEffectButton {
         position: absolute;
@@ -92,9 +79,8 @@
     </style>
   </head>
   <body>
-    <div id="loadingOverlay">Loading...</div>
-    <button id="toggleMusicButton" style="display: none">🎵</button>
-    <button id="toggleSoundEffectButton" style="display: none">🔊</button>
+    <button id="toggleMusicButton">🎵</button>
+    <button id="toggleSoundEffectButton">🔊</button>
     <script type="module" src="src/main.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/simplex-noise/2.4.0/simplex-noise.min.js"></script>
   </body>

@@ -12,7 +12,7 @@ export function createFire(scene, position) {
     vertexColors: true,
   });
 
-  const fireCount = 2500; // Number of particles
+  const fireCount = 1000;
   const fireGeometry = new THREE.BufferGeometry();
   const firePositions = new Float32Array(fireCount * 3);
   const fireVelocities = new Float32Array(fireCount);
@@ -33,15 +33,15 @@ export function createFire(scene, position) {
 
   fireGeometry.setAttribute(
     "position",
-    new THREE.BufferAttribute(firePositions, 3)
+    new THREE.BufferAttribute(firePositions, 3),
   );
   fireGeometry.setAttribute(
     "velocity",
-    new THREE.BufferAttribute(fireVelocities, 1)
+    new THREE.BufferAttribute(fireVelocities, 1),
   );
   fireGeometry.setAttribute(
     "height",
-    new THREE.BufferAttribute(fireHeights, 1)
+    new THREE.BufferAttribute(fireHeights, 1),
   );
   fireGeometry.setAttribute("color", new THREE.BufferAttribute(fireColors, 3));
 
