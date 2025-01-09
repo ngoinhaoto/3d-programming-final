@@ -25,13 +25,11 @@ export function createComets(scene, composer) {
     scene.add(comet);
     comets.push(comet);
 
-    // Add light to the comet
     const cometLight = new THREE.PointLight(new THREE.Color("xffffff"), 2, 200);
     cometLight.position.copy(comet.position);
     scene.add(cometLight);
     cometLights.push(cometLight);
 
-    // Create trail
     const points = [];
     for (let j = 0; j < Math.PI; j += (2 * Math.PI) / 100) {
       points.push(new THREE.Vector3(Math.cos(j), Math.sin(j), 0));
@@ -63,7 +61,6 @@ export function createComets(scene, composer) {
 
 export function updateComets() {
   comets.forEach((comet, index) => {
-    // Animate comet with straight movement
     comet.position.x += 0.5;
     comet.position.y += 0.1 * Math.sin(comet.position.x * 0.1); // Slightly curved path
     comet.position.z += 0.5;

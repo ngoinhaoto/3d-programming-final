@@ -14,7 +14,7 @@ import {
   moveDown,
 } from "../controls.js";
 import { createWater, updateWater } from "../waterEffect";
-import { updateFire } from "../fireEffect";
+import { createFire, updateFire } from "../fireEffect";
 import {
   preloadBackgroundMusic,
   stopBackgroundMusic,
@@ -27,17 +27,13 @@ import {
   EffectPass,
   BloomEffect,
 } from "postprocessing";
+import { createFireflies, updateFireflies } from "../fireflies.js";
+import { create3DText } from "../text3d.js";
 
-let controls,
-  water,
-  fireLight,
-  spotlight,
-  moonDirectionalLight,
-  composer,
-  fireflies;
+let controls, water, fireLight, spotlight, moonDirectionalLight, composer;
 
 export function setupSummerScene(scene, camera, renderer) {
-  scene.fog = new THREE.Fog(0x000000, 0, 500);
+  scene.fog = new THREE.Fog(0x000000, 0, 1200);
 
   camera.position.set(0, 3, 10);
 
@@ -50,7 +46,7 @@ export function setupSummerScene(scene, camera, renderer) {
 
   const loader = new THREE.TextureLoader();
   const texture = loader.load("/assets/night_sky.png");
-  const skyboxGeometry = new THREE.SphereGeometry(400, 400, 400);
+  const skyboxGeometry = new THREE.SphereGeometry(900, 900, 900);
   const skyboxMaterial = new THREE.MeshBasicMaterial({
     map: texture,
     side: THREE.BackSide,
@@ -69,19 +65,7 @@ export function setupSummerScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  const fireflyGeometry = new THREE.SphereGeometry(0.1, 16, 16);
-  const fireflyMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-  fireflies = [];
-  for (let i = 0; i < 50; i++) {
-    const firefly = new THREE.Mesh(fireflyGeometry, fireflyMaterial);
-    firefly.position.set(
-      Math.random() * 50 - 25,
-      Math.random() * 10 + 5,
-      Math.random() * 50 - 25
-    );
-    scene.add(firefly);
-    fireflies.push(firefly);
-  }
+  createFireflies(scene);
 
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
@@ -126,9 +110,23 @@ export function setupSummerScene(scene, camera, renderer) {
   // Add moon model
   loadSummerMoon(scene);
 
-  fireLight = new THREE.PointLight(0xffaa00, 10, 100); // Warm light color, intensity, and distance
-  fireLight.position.set(-1.5, 2.8, 8); // Initial position, will be updated in updateSummerScene
+  fireLight = new THREE.PointLight(0xffaa00, 10, 100);
+  fireLight.position.set(-1.5, 2.8, 8);
   scene.add(fireLight);
+
+  const myText = new Text();
+  scene.add(myText);
+
+  create3DText({
+    text: "Summer!",
+    fontUrl: "/assets/fonts/great_vibes.json",
+    size: 20,
+    height: 1,
+    position: new THREE.Vector3(-100, 50, -30),
+    rotation: new THREE.Vector3(0, Math.PI / 2, 0),
+    material: new THREE.MeshNormalMaterial(),
+    scene: scene,
+  });
 
   preloadBackgroundMusic(camera, "/assets/sleep_walk.mp3");
   preloadSoundEffect(camera, "/assets/water.mp3");
@@ -181,15 +179,12 @@ export function updateSummerScene(scene, clock, controls, camera) {
     // Update fire light position to match the fire
     fireLight.position.copy(campfire.userData.fire.position);
   }
-  fireflies.forEach((firefly) => {
-    firefly.position.x += Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
-    firefly.position.y += Math.cos(clock.getElapsedTime() * 0.5) * 0.01;
-    firefly.position.z += Math.sin(clock.getElapsedTime() * 0.5) * 0.01;
-  });
+
+  updateFireflies(clock.getDelta());
 
   // Update comets
-  updateComets();
+  updateComets(clock.getDelta());
 
   // Render scene with post-processing
-  composer.render();
+  composer.render(clock.getDelta());
 }

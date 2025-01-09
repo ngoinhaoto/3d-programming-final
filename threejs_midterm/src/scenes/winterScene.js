@@ -32,6 +32,8 @@ import {
 import { setupSummerScene, updateSummerScene } from "./summerScene";
 import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
 
+import { create3DText } from "../text3d.js";
+
 let particles;
 let spongebob;
 let controls;
@@ -85,6 +87,29 @@ export function setupWinterScene(scene, camera, renderer, callback) {
 
   loadSpongebobModel(scene);
 
+  create3DText({
+    text: "Winter!",
+    fontUrl: "/assets/fonts/lavish.json",
+    size: 30,
+    height: 2,
+    position: new THREE.Vector3(-20, 90, -150),
+    rotation: new THREE.Vector3(0, 0, 0),
+
+    scene: scene,
+  });
+  create3DText({
+    text: "Get in the cabin!",
+    fontUrl: "https://threejs.org/examples/fonts/optimer_bold.typeface.json",
+    size: 5,
+    height: 2,
+    color: 0xff0000,
+    outlineColor: 0xffffff,
+    outlineThickness: 0.2,
+    position: new THREE.Vector3(140, 50, -20),
+    rotation: new THREE.Euler(0, -Math.PI / 3.5, 0),
+    scene: scene,
+  });
+
   const cloudTexture = new THREE.TextureLoader().load(CLOUD_URL);
   clouds = new Clouds({ texture: cloudTexture, frustumCulled: false });
   scene.add(clouds);
@@ -94,13 +119,13 @@ export function setupWinterScene(scene, camera, renderer, callback) {
     cloud.color.set("#ffffff");
     cloud.position.set(
       Math.random() * 300 - 300,
-      Math.random() * 50 + 300,
+      Math.random() * 50 + 200,
       Math.random() * 300 - 300
     );
     cloud.scale.set(
-      Math.random() * 10 + 24,
-      Math.random() * 5 + 24,
-      Math.random() * 10 + 24
+      Math.random() * 10 + 20,
+      Math.random() * 5 + 20,
+      Math.random() * 10 + 20
     );
     cloud.growth = Math.random() * 0.5 + 0.5;
     cloud.speed = Math.random() * 0.5 + 0.5;

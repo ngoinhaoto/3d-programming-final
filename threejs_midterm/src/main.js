@@ -18,7 +18,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "summer"; // Change this to switch between seasons
+window.season = "summer";
 let controls, particles;
 
 if (window.season === "winter") {

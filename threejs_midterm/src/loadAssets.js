@@ -47,6 +47,13 @@ function loadMoonModel(scene) {
       moon.scale.set(3, 3, 3);
       moon.position.set(0, 200, -200);
 
+      moon.traverse((child) => {
+        if (child.isMesh) {
+          child.material.emissive = new THREE.Color(0xffffff);
+          child.material.emissiveIntensity = 0.25;
+        }
+      });
+
       const moonLight = new THREE.DirectionalLight(0xffbb66, 20);
       moonLight.position.set(0, 200, -200);
       moonLight.target.position.set(0, 0, 0); // Point the light towards the center of the scene
@@ -70,6 +77,7 @@ import {
   EffectPass,
   RenderPass,
 } from "postprocessing";
+
 function loadSummerMoon(scene, composer) {
   const loader = new GLTFLoader();
   loader.load(
@@ -77,7 +85,7 @@ function loadSummerMoon(scene, composer) {
     (gltf) => {
       const moon = gltf.scene;
       moon.scale.set(0.4, 0.4, 0.4); // Adjust size if needed
-      moon.position.set(0, 200, -100); // Position the moon in the scene
+      moon.position.set(0, 200, -300); // Position the moon in the scene
 
       // Add emissive material to the moon
       moon.traverse((child) => {
