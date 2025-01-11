@@ -4,7 +4,6 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
   loadCarouselModel,
   loadMoonModel,
-  loadSummerMoon,
   loadChristmasTreeModel,
   loadChristmasGifts,
   loadLowPolyWinterScene,
@@ -18,6 +17,10 @@ import {
   preloadBackgroundMusic,
   stopBackgroundMusic,
 } from "../backgroundMusic.js";
+import {
+  loadSpongebobModel,
+  moveSpongebobSporadically,
+} from "../spongebobWinter.js";
 
 import { preloadSoundEffect, stopSoundEffect } from "../soundEffect.js";
 
@@ -33,6 +36,10 @@ import { setupSummerScene, updateSummerScene } from "./summerScene";
 import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
 
 import { create3DText } from "../text3d.js";
+import {
+  showLoadingScreen,
+  hideLoadingScreen,
+} from "../customLoadingScreen.js";
 
 let particles;
 let spongebob;
@@ -43,7 +50,8 @@ let clouds;
 let updateScene; // Declare updateScene as a global variable
 const winterMovementSpeed = 0.5; // Define movement speed for winter scene
 
-export function setupWinterScene(scene, camera, renderer, callback) {
+export async function setupWinterScene(scene, camera, renderer, callback) {
+  showLoadingScreen();
   scene.fog = new THREE.Fog(0x000036, 0, 500); // Add fog to simulate atmosphere
 
   camera.position.set(0, 10, 30); // Adjust the initial camera position
@@ -71,19 +79,21 @@ export function setupWinterScene(scene, camera, renderer, callback) {
   preloadBackgroundMusic(camera, "/assets/winter_music.mp3");
   preloadSoundEffect(camera, "/assets/street.mp3");
   particles = createSnowParticles(scene);
-
-  loadLowPolyWinterScene(scene);
-  loadDeerModel(scene);
-  loadMoonModel(scene, camera, renderer); // Pass camera and renderer to loadMoonModel
-  loadCarouselModel(scene);
   createGroundPlane(scene);
-  loadChristmasTreeModel(scene);
-  loadChristmasGifts(scene);
-  loadLogCabinModel(scene, (loadedCabin) => {
-    cabin = loadedCabin;
-    scene.add(cabin);
-    console.log("Cabin model loaded and added to the scene:", cabin);
-  });
+
+  await Promise.all([
+    loadCarouselModel(scene),
+    loadMoonModel(scene),
+    loadChristmasTreeModel(scene),
+    loadChristmasGifts(scene),
+    loadLowPolyWinterScene(scene),
+    loadDeerModel(scene),
+    loadLogCabinModel(scene).then((loadedCabin) => {
+      cabin = loadedCabin;
+      scene.add(cabin);
+      console.log("Cabin model loaded and added to the scene:", cabin);
+    }),
+  ]);
 
   loadSpongebobModel(scene);
 
@@ -133,6 +143,7 @@ export function setupWinterScene(scene, camera, renderer, callback) {
     console.log("cloud texture", CLOUD_URL);
     clouds.add(cloud);
   }
+  hideLoadingScreen();
 
   return { controls, particles };
 }
@@ -142,50 +153,6 @@ let spongebobDirection = new THREE.Vector3(
   0,
   (Math.random() - 0.5) * 2
 ).normalize();
-
-function moveSpongebobSporadically() {
-  if (spongebob) {
-    spongebob.position.addScaledVector(spongebobDirection, 0.1); // Adjust the movement speed
-
-    // Change direction randomly
-    if (Math.random() < 0.01) {
-      spongebobDirection = new THREE.Vector3(
-        (Math.random() - 0.5) * 2,
-        0,
-        (Math.random() - 0.5) * 2
-      ).normalize();
-    }
-
-    // Keep SpongeBob within a certain range
-    const range = 50;
-    if (spongebob.position.x > range || spongebob.position.x < -range) {
-      spongebobDirection.x = -spongebobDirection.x;
-    }
-    if (spongebob.position.z > range || spongebob.position.z < -range) {
-      spongebobDirection.z = -spongebobDirection.z;
-    }
-  }
-}
-
-function loadSpongebobModel(scene) {
-  const loader = new GLTFLoader();
-  loader.load(
-    "/assets/spongebob_squarepants_xmas/scene.gltf",
-    (gltf) => {
-      spongebob = gltf.scene;
-
-      spongebob.scale.set(25, 25, 25);
-      spongebob.position.set(10, -3, 10);
-      scene.add(spongebob);
-    },
-    (xhr) => {
-      console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-    },
-    (error) => {
-      console.error("An error occurred while loading the GLTF file:", error);
-    }
-  );
-}
 
 function checkCollisionWithCabin(camera, cabin) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(

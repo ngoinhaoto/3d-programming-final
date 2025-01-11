@@ -6,7 +6,6 @@ import {
 } from "./scenes/winterScene"; // Import the switchToSummerScene function
 import { updateSummerScene, setupSummerScene } from "./scenes/summerScene";
 import { toggleMusic } from "./backgroundMusic";
-
 import { toggleSoundEffect } from "./soundEffect";
 
 const scene = new THREE.Scene();
@@ -18,24 +17,32 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "summer";
+window.season = "winter";
 let controls, particles;
 
-if (window.season === "winter") {
-  ({ controls, particles } = setupWinterScene(scene, camera, renderer));
-  window.updateScene = (scene, clock, controls, camera) =>
-    updateWinterScene(scene, clock, controls, camera, renderer);
-} else if (window.season === "summer") {
-  ({ controls, particles } = setupSummerScene(scene, camera, renderer));
-  window.updateScene = (scene, clock, controls, camera) =>
-    updateSummerScene(scene, clock, controls, camera, renderer);
+async function initializeScene() {
+  if (window.season === "winter") {
+    ({ controls, particles } = await setupWinterScene(scene, camera, renderer));
+    window.updateScene = (scene, clock, controls, camera) =>
+      updateWinterScene(scene, clock, controls, camera, renderer);
+  } else if (window.season === "summer") {
+    ({ controls, particles } = await setupSummerScene(scene, camera, renderer));
+    window.updateScene = (scene, clock, controls, camera) =>
+      updateSummerScene(scene, clock, controls, camera, renderer);
+  }
+
+  animate();
 }
+
+initializeScene();
 
 const clock = new THREE.Clock();
 
 function animate() {
   requestAnimationFrame(animate);
-  window.updateScene(scene, clock, controls, camera);
+  if (window.updateScene) {
+    window.updateScene(scene, clock, controls, camera);
+  }
   renderer.render(scene, camera);
 }
 
@@ -56,5 +63,3 @@ document
   .addEventListener("click", function () {
     toggleSoundEffect(this);
   });
-
-animate();

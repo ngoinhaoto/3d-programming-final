@@ -14,8 +14,17 @@ const numComets = 4;
 
 export function createComets(scene, composer) {
   for (let i = 0; i < numComets; i++) {
-    const cometGeometry = new THREE.SphereGeometry(0.5, 16, 16);
-    const cometMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const cometGeometry = new THREE.SphereGeometry(0.25, 16, 16);
+    const randomColor = new THREE.Color(
+      `hsl(${Math.random() * 360}, 100%, 75%)`
+    );
+
+    // Use MeshStandardMaterial with emissive property for glow effect
+    const cometMaterial = new THREE.MeshStandardMaterial({
+      color: randomColor,
+      emissive: randomColor,
+      emissiveIntensity: 1,
+    });
     const comet = new THREE.Mesh(cometGeometry, cometMaterial);
     comet.position.set(
       Math.random() * 100 - 50,
@@ -25,24 +34,31 @@ export function createComets(scene, composer) {
     scene.add(comet);
     comets.push(comet);
 
-    const cometLight = new THREE.PointLight(new THREE.Color("xffffff"), 2, 200);
+    const cometLight = new THREE.PointLight(randomColor, 2, 200);
     cometLight.position.copy(comet.position);
     scene.add(cometLight);
     cometLights.push(cometLight);
 
     const points = [];
-    for (let j = 0; j < Math.PI; j += (2 * Math.PI) / 100) {
-      points.push(new THREE.Vector3(Math.cos(j), Math.sin(j), 0));
+    const widths = [];
+    for (let j = 0; j < 100; j++) {
+      points.push(new THREE.Vector3(0, 0, 0));
+      widths.push(1 - j / 100);
     }
     const trailGeometry = new THREE.BufferGeometry().setFromPoints(points);
+    trailGeometry.setAttribute(
+      "width",
+      new THREE.Float32BufferAttribute(widths, 1)
+    );
     const trail = new MeshLine();
     trail.setGeometry(trailGeometry);
     const trailMaterial = new MeshLineMaterial({
-      color: cometLight.color,
+      color: randomColor,
       lineWidth: 0.3,
       transparent: true,
       opacity: 0.5,
       resolution: new THREE.Vector2(window.innerWidth, window.innerHeight),
+      sizeAttenuation: true,
     });
     const trailMesh = new THREE.Mesh(trail.geometry, trailMaterial);
     trailMesh.raycast = MeshLineRaycast;
@@ -59,7 +75,7 @@ export function createComets(scene, composer) {
   composer.addPass(effectPass);
 }
 
-export function updateComets() {
+export function updateComets(delta) {
   comets.forEach((comet, index) => {
     comet.position.x += 0.5;
     comet.position.y += 0.1 * Math.sin(comet.position.x * 0.1); // Slightly curved path

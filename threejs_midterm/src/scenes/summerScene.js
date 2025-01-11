@@ -4,6 +4,9 @@ import {
   loadBeachModel,
   loadCampfireModel,
   loadSummerMoon,
+  loadFloatingIslandModel,
+  loadSpringPortal,
+  loadAutumnPortal,
 } from "../loadAssets.js";
 import {
   moveForward,
@@ -29,10 +32,16 @@ import {
 } from "postprocessing";
 import { createFireflies, updateFireflies } from "../fireflies.js";
 import { create3DText } from "../text3d.js";
+import {
+  showLoadingScreen,
+  hideLoadingScreen,
+} from "../customLoadingScreen.js";
 
 let controls, water, fireLight, spotlight, moonDirectionalLight, composer;
 
-export function setupSummerScene(scene, camera, renderer) {
+export async function setupSummerScene(scene, camera, renderer) {
+  showLoadingScreen();
+
   scene.fog = new THREE.Fog(0x000000, 0, 1200);
 
   camera.position.set(0, 3, 10);
@@ -70,7 +79,6 @@ export function setupSummerScene(scene, camera, renderer) {
   const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
   scene.add(ambientLight);
 
-  // Add hemisphere light to simulate natural light from the sky and ground
   const hemisphereLight = new THREE.HemisphereLight(0x444444, 0x080820, 0.8); // Increase hemisphere light intensity
   scene.add(hemisphereLight);
 
@@ -89,7 +97,6 @@ export function setupSummerScene(scene, camera, renderer) {
   scene.add(moonDirectionalLight);
   scene.add(moonDirectionalLight.target);
 
-  // Add spotlight to highlight specific areas
   spotlight = new THREE.SpotLight(0xffffff, 1.2); // Increase spotlight intensity
   spotlight.position.set(10, 20, 10); // Position the spotlight
   spotlight.angle = Math.PI / 6; // Set the spotlight angle
@@ -99,16 +106,18 @@ export function setupSummerScene(scene, camera, renderer) {
   spotlight.castShadow = true; // Enable shadows
   scene.add(spotlight);
 
-  loadBeachModel(scene); // Load the beach model
-
-  // Add water effect
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
   water = createWater(scene, renderer);
 
-  // Add campfire model
-  loadCampfireModel(scene);
-
-  // Add moon model
-  loadSummerMoon(scene);
+  await Promise.all([
+    loadBeachModel(scene),
+    loadSpringPortal(scene),
+    loadAutumnPortal(scene),
+    loadCampfireModel(scene),
+    loadSummerMoon(scene, composer),
+    loadFloatingIslandModel(scene),
+  ]);
 
   fireLight = new THREE.PointLight(0xffaa00, 10, 100);
   fireLight.position.set(-1.5, 2.8, 8);
@@ -118,9 +127,9 @@ export function setupSummerScene(scene, camera, renderer) {
   scene.add(myText);
 
   create3DText({
-    text: "Summer!",
+    text: "Pluto Summer!",
     fontUrl: "/assets/fonts/great_vibes.json",
-    size: 20,
+    size: 15,
     height: 1,
     position: new THREE.Vector3(-100, 50, -30),
     rotation: new THREE.Vector3(0, Math.PI / 2, 0),
@@ -131,24 +140,21 @@ export function setupSummerScene(scene, camera, renderer) {
   preloadBackgroundMusic(camera, "/assets/sleep_walk.mp3");
   preloadSoundEffect(camera, "/assets/water.mp3");
 
-  // Create post-processing composer
-  composer = new EffectComposer(renderer);
-  composer.addPass(new RenderPass(scene, camera));
-
-  // Create comets
   createComets(scene, composer);
+
+  hideLoadingScreen();
 
   return { controls, particles: null };
 }
 
 export function updateSummerScene(scene, clock, controls, camera) {
   const summerMovementSpeed = 0.1;
-  console.log("update summer");
+  const delta = clock.getDelta();
   controls.update();
 
   const direction = new THREE.Vector3();
   camera.getWorldDirection(direction);
-  direction.y = 0; // Ignore vertical movement for forward/backward
+  direction.y = 0;
   direction.normalize();
 
   const right = new THREE.Vector3();
@@ -168,23 +174,24 @@ export function updateSummerScene(scene, clock, controls, camera) {
     beach.rotation.y += 0.01;
   }
 
-  // Update water effect
-  updateWater(water, clock);
+  if (water) {
+    updateWater(water, clock);
+  }
 
-  // Update fire effect
   const campfire = scene.getObjectByName("CampFire");
-  if (campfire && campfire.userData.fire) {
+  if (campfire && campfire.userData.fire && fireLight) {
     updateFire(campfire.userData.fire);
-
-    // Update fire light position to match the fire
     fireLight.position.copy(campfire.userData.fire.position);
   }
 
-  updateFireflies(clock.getDelta());
+  updateFireflies(delta);
+  updateComets(delta);
 
-  // Update comets
-  updateComets(clock.getDelta());
+  if (scene.userData.mixers) {
+    scene.userData.mixers.forEach((mixer) => {
+      mixer.update(delta);
+    });
+  }
 
-  // Render scene with post-processing
-  composer.render(clock.getDelta());
+  composer.render(delta);
 }
