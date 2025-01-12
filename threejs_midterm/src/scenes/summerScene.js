@@ -4,10 +4,9 @@ import {
   loadBeachModel,
   loadCampfireModel,
   loadSummerMoon,
-  loadFloatingIslandModel,
   loadSpringPortal,
   loadAutumnPortal,
-} from "../loadAssets.js";
+} from "../loadAssets/summerAssets.js";
 import {
   moveForward,
   moveBackward,
@@ -116,7 +115,6 @@ export async function setupSummerScene(scene, camera, renderer) {
     loadAutumnPortal(scene),
     loadCampfireModel(scene),
     loadSummerMoon(scene, composer),
-    loadFloatingIslandModel(scene),
   ]);
 
   fireLight = new THREE.PointLight(0xffaa00, 10, 100);

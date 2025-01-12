@@ -1,6 +1,5 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
-import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import {
   loadCarouselModel,
   loadMoonModel,
@@ -10,7 +9,7 @@ import {
   loadDeerModel,
   loadLogCabinModel,
   updateGiftsEmissiveColor,
-} from "../loadAssets.js";
+} from "../loadAssets/winterAssets.js";
 import { createSnowParticles, updateSnowParticles } from "../snowParticles.js";
 import { makeRoughGround, createGroundPlane } from "../snowGround.js";
 import {
@@ -79,7 +78,7 @@ export async function setupWinterScene(scene, camera, renderer, callback) {
   preloadBackgroundMusic(camera, "/assets/winter_music.mp3");
   preloadSoundEffect(camera, "/assets/street.mp3");
   particles = createSnowParticles(scene);
-  createGroundPlane(scene);
+  planeMesh = createGroundPlane(scene);
 
   await Promise.all([
     loadCarouselModel(scene),

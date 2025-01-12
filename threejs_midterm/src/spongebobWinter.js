@@ -32,6 +32,11 @@ export function moveSpongebobSporadically() {
   if (spongebob) {
     spongebob.position.addScaledVector(spongebobDirection, 0.1); // Adjust the movement speed
 
+    // Rotate SpongeBob to face the direction of movement
+    const targetPosition = spongebob.position.clone().add(spongebobDirection);
+    spongebob.lookAt(targetPosition);
+
+    // Change direction randomly
     if (Math.random() < 0.01) {
       spongebobDirection = new THREE.Vector3(
         (Math.random() - 0.5) * 2,
@@ -40,6 +45,7 @@ export function moveSpongebobSporadically() {
       ).normalize();
     }
 
+    // Keep SpongeBob within a certain range
     const range = 50;
     if (spongebob.position.x > range || spongebob.position.x < -range) {
       spongebobDirection.x = -spongebobDirection.x;
