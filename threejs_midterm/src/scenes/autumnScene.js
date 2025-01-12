@@ -1,6 +1,27 @@
 import * as THREE from "three";
 import { PointerLockControls } from "three/examples/jsm/controls/PointerLockControls";
 import {
+  showLoadingScreen,
+  hideLoadingScreen,
+} from "../customLoadingScreen.js";
+import { create3DText } from "../text3d.js";
+import {
+  createTerrainTiles,
+  updateTerrainTiles,
+  placeCactiOnTerrain,
+} from "../terrain.js";
+import {
+  loadFloatingIslandModel,
+  loadPlanet,
+} from "../loadAssets/autumnAssets.js";
+import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
+import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
+import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
+import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
+import { createSandParticles, updateSandParticles } from "../sandParticles.js"; // Import sand particles
+import { light } from "../lensFlare.js";
+import { createWindEffect, updateWindEffect } from "../wind.js";
+import {
   moveForward,
   moveBackward,
   moveLeft,
@@ -8,32 +29,27 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
-import {
-  showLoadingScreen,
-  hideLoadingScreen,
-} from "../customLoadingScreen.js";
-import { create3DText } from "../text3d.js";
-import {
-  EffectComposer,
-  RenderPass,
-  EffectPass,
-  BloomEffect,
-} from "postprocessing";
-import { createTerrainWithHeightMap } from "../terrain.js";
-import {
-  loadFloatingIslandModel,
-  loadSun,
-  loadMedievalBook,
-} from "../loadAssets/autumnAssets.js";
 
-let controls, composer, particles;
+let controls, composer, particles, clouds, sandParticles, windParticles;
 
 export async function setupAutumnScene(scene, camera, renderer) {
   showLoadingScreen();
+  const loader = new THREE.CubeTextureLoader();
+  const skyboxTexture = loader.load([
+    "/assets/nightskyemission.png",
+    "/assets/nightskyemission.png",
+    "/assets/nightskyemission.png",
+    "/assets/nightskyemission.png",
+    "/assets/nightskyemission.png",
+    "/assets/nightskyemission.png",
+  ]);
+  scene.background = skyboxTexture;
 
-  scene.fog = new THREE.Fog(0x87ceeb, 0, 1200); // Light blue fog
+  document.body.appendChild(renderer.domElement);
 
-  camera.position.set(0, 3, 10);
+  scene.fog = new THREE.Fog(0x000000, 0, 1000);
+
+  camera.position.set(0, 100, -30);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -41,12 +57,12 @@ export async function setupAutumnScene(scene, camera, renderer) {
   renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-  renderer.setClearColor(0x87ceeb); // Set the background color to light blue
-
-  document.body.appendChild(renderer.domElement);
 
   controls = new PointerLockControls(camera, document.body);
   scene.add(controls.getObject());
+
+  light.position.set(50, 470, -400); // Adjust the position as needed
+  scene.add(light);
 
   document.addEventListener("click", () => {
     controls.lock();
@@ -61,37 +77,73 @@ export async function setupAutumnScene(scene, camera, renderer) {
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
-  // Load procedural terrain
-  const terrain = await createTerrainWithHeightMap("/assets/height_map.jpg");
-  scene.add(terrain);
+  const bloomPass = new UnrealBloomPass(
+    new THREE.Vector2(window.innerWidth, window.innerHeight),
+    1.5, // Strength
+    0.4, // Radius
+    0.85 // Threshold
+  );
+  composer.addPass(bloomPass);
 
-  await Promise.all([
-    loadFloatingIslandModel(scene),
-    loadMedievalBook(scene),
-    loadSun(scene),
-  ]);
+  // Create terrain tiles
+  await createTerrainTiles(scene, "/assets/height_map.jpg");
 
-  // Load toy castle model
+  await placeCactiOnTerrain(scene);
+
+  await Promise.all([loadFloatingIslandModel(scene), loadPlanet(scene)]);
+
+  const cloudTexture = new THREE.TextureLoader().load(CLOUD_URL);
+  clouds = new Clouds({ texture: cloudTexture, frustumCulled: false });
+  scene.add(clouds);
+
+  const cloudPositions = [
+    new THREE.Vector3(-150, 175, -300),
+    new THREE.Vector3(0, 175, -300),
+    new THREE.Vector3(150, 175, -300),
+  ];
+
+  for (let i = 0; i < 3; i++) {
+    const cloud = new Cloud({ fade: 1, growth: 1.5, speed: 1 });
+    cloud.color.set("#ffffff");
+
+    const newPosition = cloudPositions[i];
+    cloud.position.copy(newPosition);
+
+    cloud.scale.set(
+      Math.random() * 10 + 25,
+      Math.random() * 5 + 25,
+      Math.random() * 10 + 25
+    );
+
+    cloud.growth = Math.random() * 0.5 + 0.5;
+    cloud.speed = Math.random() * 0.5 + 0.5;
+
+    console.log("cloud texture", CLOUD_URL);
+    clouds.add(cloud);
+  }
 
   const myText = new Text();
   scene.add(myText);
 
   create3DText({
-    text: "Not Autumn!",
-    fontUrl: "/assets/fonts/lavish.json",
-    size: 25,
+    text: "DESERT AUTUMN!",
+    fontUrl: "/assets/fonts/melgrim.json",
+    size: 20,
     height: 2,
-    position: new THREE.Vector3(-20, 100, -150),
+    position: new THREE.Vector3(100, 120, -120),
     rotation: new THREE.Vector3(0, 0, 0),
     scene: scene,
   });
+
+  sandParticles = createSandParticles(scene); // Create sand particles
 
   hideLoadingScreen();
 
   return { controls, particles };
 }
 
-export function updateAutumnScene(scene, clock, controls, camera) {
+export function updateAutumnScene(scene, clock, controls, camera, renderer) {
+  const movementSpeed = 0.5;
   const delta = clock.getDelta();
   controls.update();
 
@@ -103,12 +155,24 @@ export function updateAutumnScene(scene, clock, controls, camera) {
   const right = new THREE.Vector3();
   right.crossVectors(camera.up, direction).normalize();
 
-  if (moveForward) camera.position.addScaledVector(direction, 0.1);
-  if (moveBackward) camera.position.addScaledVector(direction, -0.1);
-  if (moveLeft) camera.position.addScaledVector(right, 0.1);
-  if (moveRight) camera.position.addScaledVector(right, -0.1);
-  if (moveUp) camera.position.y += 0.1;
-  if (moveDown) camera.position.y -= 0.1;
+  if (moveForward) camera.position.addScaledVector(direction, movementSpeed);
+  if (moveBackward) camera.position.addScaledVector(direction, -movementSpeed);
+  if (moveLeft) camera.position.addScaledVector(right, movementSpeed);
+  if (moveRight) camera.position.addScaledVector(right, -movementSpeed);
+  if (moveUp) camera.position.y += movementSpeed;
+  if (moveDown) camera.position.y -= movementSpeed;
+  if (clouds) {
+    clouds.update(camera, clock.getElapsedTime(), clock.getDelta());
+  }
 
-  composer.render(delta);
+  updateTerrainTiles(camera);
+
+  if (sandParticles) {
+    updateSandParticles(sandParticles); // Update sand particles
+  }
+  // if (windParticles) {
+  //   console.log("UPDATING WIND PARTICLES ");
+  //   updateWindEffect(clock);
+  // }
+  renderer.render(scene, camera);
 }

@@ -147,17 +147,12 @@ export async function setupWinterScene(scene, camera, renderer, callback) {
   return { controls, particles };
 }
 
-let spongebobDirection = new THREE.Vector3(
-  (Math.random() - 0.5) * 2,
-  0,
-  (Math.random() - 0.5) * 2
-).normalize();
-
 function checkCollisionWithCabin(camera, cabin) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(
     camera.position,
     new THREE.Vector3(1, 1, 1) // Adjust the size of the bounding box as needed
   );
+  console.log("Camera box:", cameraBox);
   const cabinBox = new THREE.Box3().setFromObject(cabin);
 
   return cameraBox.intersectsBox(cabinBox);

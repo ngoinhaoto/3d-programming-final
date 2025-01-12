@@ -26,18 +26,28 @@ function loadFloatingIslandModel(scene) {
     );
   });
 }
-
-function loadMedievalBook(scene) {
+function loadPlanet(scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(
-      "/assets/medieval_fantasy_book.glb",
+      "/assets/purple_planet.glb",
       (gltf) => {
-        gltf.scene.scale.set(1, 1, 1);
-        gltf.scene.position.set(-50, 20, -50);
+        gltf.scene.scale.set(70, 70, 70);
+        gltf.scene.position.set(0, 400, -400);
+        gltf.scene.name = "purple_planet";
 
-        const fantasyBook = gltf.scene;
-        scene.add(fantasyBook);
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.material.emissive = new THREE.Color(0x800080);
+            child.material.emissiveIntensity = 5;
+
+            // Set the bloom layer
+            child.layers.enable(1); // Layer 1 for bloom
+          }
+        });
+        scene.add(gltf.scene);
+
+        console.log("purple_planet loaded successfully!");
 
         const mixer = new THREE.AnimationMixer(gltf.scene);
         gltf.animations.forEach((clip) => {
@@ -63,43 +73,5 @@ function loadMedievalBook(scene) {
     );
   });
 }
-function loadSun(scene) {
-  return new Promise((resolve, reject) => {
-    const loader = new GLTFLoader();
-    loader.load(
-      "/assets/sun1.glb",
-      (gltf) => {
-        gltf.scene.scale.set(3, 3, 3);
-        gltf.scene.position.set(0, 300, -200);
 
-        const sun = gltf.scene;
-        scene.add(sun);
-
-        console.log("Sun model loaded successfully!");
-
-        const mixer = new THREE.AnimationMixer(gltf.scene);
-        gltf.animations.forEach((clip) => {
-          mixer.clipAction(clip).play();
-        });
-
-        const clock = new THREE.Clock();
-        function animate() {
-          requestAnimationFrame(animate);
-          const delta = clock.getDelta();
-          mixer.update(delta);
-        }
-        animate();
-        resolve();
-      },
-      (xhr) => {
-        console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-      },
-      (error) => {
-        console.error("An error occurred while loading the GLB file:", error);
-        reject(error);
-      }
-    );
-  });
-}
-
-export { loadFloatingIslandModel, loadMedievalBook, loadSun };
+export { loadFloatingIslandModel, loadPlanet };

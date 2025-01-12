@@ -35,8 +35,15 @@ import {
   showLoadingScreen,
   hideLoadingScreen,
 } from "../customLoadingScreen.js";
+import { setupAutumnScene, updateAutumnScene } from "./autumnScene.js";
 
-let controls, water, fireLight, spotlight, moonDirectionalLight, composer;
+let controls,
+  water,
+  fireLight,
+  spotlight,
+  moonDirectionalLight,
+  composer,
+  portal;
 
 export async function setupSummerScene(scene, camera, renderer) {
   showLoadingScreen();
@@ -111,8 +118,13 @@ export async function setupSummerScene(scene, camera, renderer) {
 
   await Promise.all([
     loadBeachModel(scene),
-    loadSpringPortal(scene),
-    loadAutumnPortal(scene),
+    // loadSpringPortal(scene),
+    loadAutumnPortal(scene).then((loadedPortal) => {
+      portal = loadedPortal;
+      scene.add(portal);
+      console.log("portal loaded and added to the scene:", portal);
+    }),
+
     loadCampfireModel(scene),
     loadSummerMoon(scene, composer),
   ]);
@@ -145,8 +157,23 @@ export async function setupSummerScene(scene, camera, renderer) {
   return { controls, particles: null };
 }
 
-export function updateSummerScene(scene, clock, controls, camera) {
-  const summerMovementSpeed = 0.1;
+function checkCollisionWithPortal(camera, portal) {
+  const cameraBox = new THREE.Box3().setFromCenterAndSize(
+    camera.position,
+    new THREE.Vector3(1, 1, 1)
+  );
+
+  if (!portal) {
+    console.log("Portal is not defined");
+    return false;
+  }
+
+  const portalBox = new THREE.Box3().setFromObject(portal);
+  return cameraBox.intersectsBox(portalBox);
+}
+
+export function updateSummerScene(scene, clock, controls, camera, renderer) {
+  const summerMovementSpeed = 0.5;
   const delta = clock.getDelta();
   controls.update();
 
@@ -191,5 +218,36 @@ export function updateSummerScene(scene, clock, controls, camera) {
     });
   }
 
-  composer.render(delta);
+  if (portal) {
+    if (checkCollisionWithPortal(camera, portal)) {
+      console.log("COLLIDED WITH PORTAL");
+
+      updateScene = () => {};
+      switchToAutumnScene(scene, camera, renderer);
+    }
+  }
+  // composer.render(delta);
+  renderer.render(scene, camera);
+}
+
+export function switchToAutumnScene(scene, camera, renderer) {
+  stopBackgroundMusic();
+  stopSoundEffect();
+  scene.clear();
+  renderer.clear();
+  composer.dispose();
+
+  console.log("Switching to autumn scene...");
+
+  setupAutumnScene(scene, camera, renderer)
+    .then(({ controls, particles }) => {
+      window.season = "autumn";
+      window.updateScene = (scene, clock, controls, camera) =>
+        updateAutumnScene(scene, clock, controls, camera, renderer);
+
+      console.log("Autumn scene setup complete.");
+    })
+    .catch((error) => {
+      console.error("Error setting up autumn scene:", error);
+    });
 }

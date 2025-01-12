@@ -175,7 +175,7 @@ function loadAutumnPortal(scene) {
           mixer.update(delta);
         }
         animate();
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
