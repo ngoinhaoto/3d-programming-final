@@ -114,11 +114,6 @@ glsl-noise@^0.0.0:
   resolved "https://registry.npmjs.org/glsl-noise/-/glsl-noise-0.0.0.tgz"
   integrity sha512-b/ZCF6amfAUb7dJM/MxRs7AetQEahYzJ8PtgfrmEdtw6uyGOr+ZSGtgjFm6mfsBkxJ4d2W7kg+Nlqzqvn3Bc0w==
 
-lodash@^4.17.21:
-  version "4.17.21"
-  resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz"
-  integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
-
 meshoptimizer@~0.18.1:
   version "0.18.1"
   resolved "https://registry.npmjs.org/meshoptimizer/-/meshoptimizer-0.18.1.tgz"
@@ -147,11 +142,6 @@ postprocessing@^6.36.6:
   version "6.36.6"
   resolved "https://registry.npmjs.org/postprocessing/-/postprocessing-6.36.6.tgz"
   integrity sha512-mjJjoXbC97XMV6iQVhOZYNjD5X93o3+/zpYm9oRmsyjP3LjfwedT8PgusECTk+s5DZeZoJ8vA9htdWuH8JH+mQ==
-
-potpack@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/potpack/-/potpack-1.0.2.tgz"
-  integrity sha512-choctRBIV9EMT9WGAZHn3V7t0Z2pMQyl0EZE6pFc/6ml3ssw7Dlf/oAOvFwjm1HVsqfQN8GfeFyJ+d8tRzqueQ==
 
 require-from-string@^2.0.2:
   version "2.0.2"
@@ -191,21 +181,12 @@ source-map-js@^1.2.1:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.1.tgz"
   integrity sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==
 
-three-nebula@^10.0.3:
-  version "10.0.3"
-  resolved "https://registry.npmjs.org/three-nebula/-/three-nebula-10.0.3.tgz"
-  integrity sha512-cX0UVkCGKx1r36z/yo26HAjsMGa3NcSvGZlODTLo6lfNikpK7oYXgq5r4yVrjaGjhpeKnFalNTI8LsHiZ8KlYw==
-  dependencies:
-    lodash "^4.17.21"
-    potpack "^1.0.1"
-    uuid "^3.3.2"
-
 three.meshline@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/three.meshline/-/three.meshline-1.4.0.tgz"
   integrity sha512-A8IsiMrWP8zmHisGDAJ76ZD7t/dOF/oCe/FUKNE6Bu01ZYEx8N6IlU/1Plb2aOZtAuWM2A8s8qS3hvY0OFuvOw==
 
-three@^0.171.0, "three@>= 0.157.0 < 0.173.0", "three@>=0.122.0 <1.0.0", three@>=0.125.0, three@>=0.137:
+three@^0.171.0, "three@>= 0.157.0 < 0.173.0", three@>=0.125.0, three@>=0.137:
   version "0.171.0"
   resolved "https://registry.npmjs.org/three/-/three-0.171.0.tgz"
   integrity sha512-Y/lAXPaKZPcEdkKjh0JOAHVv8OOnv/NDJqm0wjfCzyQmfKxV7zvkwsnBgPBKTzJHToSOhRGQAGbPJObT59B/PQ==
@@ -229,11 +210,6 @@ troika-worker-utils@^0.52.0:
   version "0.52.0"
   resolved "https://registry.npmjs.org/troika-worker-utils/-/troika-worker-utils-0.52.0.tgz"
   integrity sha512-W1CpvTHykaPH5brv5VHLfQo9D1OYuo0cSBEUQFFT/nBUzM8iD6Lq2/tgG/f1OelbAS1WtaTPQzE5uM49egnngw==
-
-uuid@^3.3.2:
-  version "3.4.0"
-  resolved "https://registry.npmjs.org/uuid/-/uuid-3.4.0.tgz"
-  integrity sha512-HjSDRw6gZE5JMggctHBcjVak08+KEVhSIiDzFnT9S9aegmp85S/bReBVTb4QTFaRNptJ9kuYaNhnbNEOkbKb/A==
 
 vite@^6.0.3:
   version "6.0.7"

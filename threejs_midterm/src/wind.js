@@ -4,7 +4,7 @@ import { MeshLine, MeshLineMaterial } from "three.meshline";
 const windLines = [];
 const maxWindLines = 50;
 const windLineLength = 40;
-const windSpeed = 70;
+const windSpeed = 120;
 
 export function createWindEffect(scene) {
   for (let i = 0; i < maxWindLines; i++) {
@@ -60,17 +60,16 @@ export function updateWindEffect(clock) {
     // Update the geometry (positions) of the wind line
     const positions = trailGeometry.attributes.position.array;
 
-    // Shift all positions in the trail to make space for the new point
-    for (let i = positions.length - 3; i >= 3; i -= 3) {
-      positions[i] = positions[i - 3];
-      positions[i + 1] = positions[i - 2];
-      positions[i + 2] = positions[i - 1];
+    // Smoothly interpolate the trail movement by using a simple easing function (ease in)
+    const smoothFactor = 0.2; // Controls how smooth the transition is
+    for (let i = 0; i < positions.length; i += 3) {
+      positions[i] =
+        positions[i] * (1 - smoothFactor) + mesh.position.x * smoothFactor;
+      positions[i + 1] =
+        positions[i + 1] * (1 - smoothFactor) + mesh.position.y * smoothFactor;
+      positions[i + 2] =
+        positions[i + 2] * (1 - smoothFactor) + mesh.position.z * smoothFactor;
     }
-
-    // Set the new position for the start of the line
-    positions[0] = mesh.position.x;
-    positions[1] = mesh.position.y;
-    positions[2] = mesh.position.z;
 
     // Update the geometry to reflect the new positions
     trailGeometry.attributes.position.needsUpdate = true;

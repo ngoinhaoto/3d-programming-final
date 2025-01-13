@@ -138,9 +138,24 @@ export async function setupSummerScene(scene, camera, renderer) {
     fontUrl: "/assets/fonts/great_vibes.json",
     size: 15,
     height: 1,
-    position: new THREE.Vector3(-100, 50, -30),
+    position: new THREE.Vector3(-100, 50, 20),
     rotation: new THREE.Vector3(0, Math.PI / 2, 0),
     material: new THREE.MeshNormalMaterial(),
+    scene: scene,
+  });
+
+  create3DText({
+    text: "Get in the portal!",
+    fontUrl: "/assets/fonts/eater.json",
+    size: 5,
+    height: 2,
+    color: 0x39a267,
+    outlineColor: 0xffffff,
+    outlineThickness: 0.2,
+    material: new THREE.MeshNormalMaterial(),
+
+    position: new THREE.Vector3(-100, 55, -100),
+    rotation: new THREE.Vector3(0, Math.PI / 4, 0),
     scene: scene,
   });
 

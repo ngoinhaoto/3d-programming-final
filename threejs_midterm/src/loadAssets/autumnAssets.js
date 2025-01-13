@@ -133,7 +133,7 @@ function loadDesertMesaModel(scene) {
       "/assets/desert_mesa.glb",
       (gltf) => {
         gltf.scene.scale.set(200, 200, 200);
-        gltf.scene.position.set(-100, 60, -300);
+        gltf.scene.position.set(-100, 60, -200);
 
         const desert_mesa = gltf.scene;
         scene.add(desert_mesa);
@@ -159,7 +159,7 @@ function loadSpringPortal(scene) {
       "/assets/the_well_spiders_portal.glb",
       (gltf) => {
         gltf.scene.scale.set(30, 30, 30);
-        gltf.scene.position.set(-500, 5, -400);
+        gltf.scene.position.set(-500, 8, -400);
 
         gltf.scene.name = "portal";
 

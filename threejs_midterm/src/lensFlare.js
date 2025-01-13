@@ -19,9 +19,9 @@ const textureFlare2 = textureLoader.load(
 const flareColor = new THREE.Color(0xfee3ff); // Purple color
 
 const lensflare = new Lensflare();
-lensflare.addElement(new LensflareElement(textureFlare0, 512, 0, flareColor));
-lensflare.addElement(new LensflareElement(textureFlare1, 512, 0, flareColor));
-lensflare.addElement(new LensflareElement(textureFlare2, 80, 0.6, flareColor));
+lensflare.addElement(new LensflareElement(textureFlare0, 1024, 0, flareColor));
+lensflare.addElement(new LensflareElement(textureFlare1, 1024, 0, flareColor));
+lensflare.addElement(new LensflareElement(textureFlare2, 160, 0.6, flareColor));
 
 light.add(lensflare);
 export { light };

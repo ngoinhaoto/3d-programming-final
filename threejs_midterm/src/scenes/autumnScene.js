@@ -84,22 +84,21 @@ export async function setupAutumnScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Soft ambient light
+  const ambientLight = new THREE.AmbientLight(0xffffff, 3);
   scene.add(ambientLight);
+
+  const directionalLight = new THREE.DirectionalLight(0xffc34d, 35);
+  directionalLight.position.set(500, 200, -500);
+  directionalLight.castShadow = true;
+  directionalLight.shadow.mapSize.width = 1024;
+  directionalLight.shadow.mapSize.height = 1024;
+  scene.add(directionalLight);
 
   const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5); // Light from the sky and ground
   scene.add(hemisphereLight);
 
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
-
-  const bloomPass = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    1.5, // Strength
-    0.4, // Radius
-    0.85 // Threshold
-  );
-  composer.addPass(bloomPass);
 
   // Create terrain tiles
   await createTerrainTiles(scene, "/assets/height_map.jpg");
@@ -166,6 +165,22 @@ export async function setupAutumnScene(scene, camera, renderer) {
     scene: scene,
   });
 
+  create3DText({
+    text: "Get in!",
+    fontUrl: "https://threejs.org/examples/fonts/optimer_regular.typeface.json",
+    size: 25,
+    height: 2,
+
+    color: 0xffaf2e,
+    outlineColor: 0xffffff,
+    outlineThickness: 1.5,
+    material: new THREE.MeshNormalMaterial(),
+
+    position: new THREE.Vector3(-500, 150, -400),
+    rotation: new THREE.Vector3(0, 0, 0),
+    scene: scene,
+  });
+
   sandParticles = createSandParticles(scene); // Create sand particles
 
   hideLoadingScreen();
@@ -174,7 +189,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
 }
 
 export function updateAutumnScene(scene, clock, controls, camera, renderer) {
-  const movementSpeed = 0.5;
+  const movementSpeed = 1;
   const delta = clock.getDelta();
   controls.update();
 
@@ -193,7 +208,7 @@ export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   if (moveUp) camera.position.y += movementSpeed;
   if (moveDown) camera.position.y -= movementSpeed;
   if (clouds) {
-    clouds.update(camera, clock.getElapsedTime(), clock.getDelta());
+    clouds.update(camera, clock.getElapsedTime(), delta);
   }
 
   updateTerrainTiles(camera);
