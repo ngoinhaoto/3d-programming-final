@@ -29,7 +29,7 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
-
+import { Text } from "troika-three-text";
 let controls, composer, particles, clouds, sandParticles, windParticles;
 
 export async function setupAutumnScene(scene, camera, renderer) {
@@ -81,7 +81,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
     new THREE.Vector2(window.innerWidth, window.innerHeight),
     1.5, // Strength
     0.4, // Radius
-    0.85 // Threshold
+    0.85, // Threshold
   );
   composer.addPass(bloomPass);
 
@@ -112,7 +112,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
     cloud.scale.set(
       Math.random() * 10 + 25,
       Math.random() * 5 + 25,
-      Math.random() * 10 + 25
+      Math.random() * 10 + 25,
     );
 
     cloud.growth = Math.random() * 0.5 + 0.5;
@@ -134,6 +134,17 @@ export async function setupAutumnScene(scene, camera, renderer) {
     rotation: new THREE.Vector3(0, 0, 0),
     scene: scene,
   });
+
+  const complexText = new Text();
+  complexText.text = "Test Text";
+  complexText.fontSize = 20;
+  complexText.strokeWidth = 5;
+  complexText.strokeColor = 0xff88;
+  complexText.position.set(0, 100, 0);
+  complexText.color = 0xff88ee;
+  // complexText.curveRadius = 20;
+  complexText.sync();
+  scene.add(complexText);
 
   sandParticles = createSandParticles(scene); // Create sand particles
 
