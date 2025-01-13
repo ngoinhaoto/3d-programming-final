@@ -13,6 +13,10 @@ import {
 import {
   loadFloatingIslandModel,
   loadPlanet,
+  loadDesertMesaModel,
+  loadPyramidModel,
+  loadEgyptianPyramidModel,
+  loadSpringPortal,
 } from "../loadAssets/autumnAssets.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -29,9 +33,16 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
-
-let controls, composer, particles, clouds, sandParticles, windParticles;
-
+import { preloadBackgroundMusic } from "../backgroundMusic.js";
+import { preloadSoundEffect } from "../soundEffect.js";
+let controls,
+  composer,
+  particles,
+  clouds,
+  sandParticles,
+  windParticles,
+  island,
+  portal;
 export async function setupAutumnScene(scene, camera, renderer) {
   showLoadingScreen();
   const loader = new THREE.CubeTextureLoader();
@@ -49,7 +60,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
 
   scene.fog = new THREE.Fog(0x000000, 0, 1000);
 
-  camera.position.set(0, 100, -30);
+  camera.position.set(100, 100, 150);
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -58,7 +69,12 @@ export async function setupAutumnScene(scene, camera, renderer) {
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
+  preloadBackgroundMusic(camera, "/assets/desert_music_klf.mp3");
+  preloadSoundEffect(camera, "/assets/desert_sfx.mp3");
+
   controls = new PointerLockControls(camera, document.body);
+  controls.pointerSpeed = 0.5;
+
   scene.add(controls.getObject());
 
   light.position.set(50, 470, -400); // Adjust the position as needed
@@ -68,7 +84,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 1.75); // Soft ambient light
+  const ambientLight = new THREE.AmbientLight(0xffffff, 3); // Soft ambient light
   scene.add(ambientLight);
 
   const hemisphereLight = new THREE.HemisphereLight(0x87ceeb, 0x000000, 0.5); // Light from the sky and ground
@@ -90,8 +106,23 @@ export async function setupAutumnScene(scene, camera, renderer) {
 
   await placeCactiOnTerrain(scene);
 
-  await Promise.all([loadFloatingIslandModel(scene), loadPlanet(scene)]);
-
+  await Promise.all([
+    loadPlanet(scene),
+    loadFloatingIslandModel(scene).then((loadedIsland) => {
+      island = loadedIsland;
+      scene.add(island);
+      console.log("floating island loaded and added to the scene:", island);
+    }),
+    loadPyramidModel(scene),
+    loadEgyptianPyramidModel(scene),
+    loadDesertMesaModel(scene),
+    loadSpringPortal(scene).then((loadedPortal) => {
+      portal = loadedPortal;
+      scene.add(portal);
+    }),
+  ]);
+  windParticles = createWindEffect(scene);
+  console.log("wind particles", windParticles);
   const cloudTexture = new THREE.TextureLoader().load(CLOUD_URL);
   clouds = new Clouds({ texture: cloudTexture, frustumCulled: false });
   scene.add(clouds);
@@ -104,7 +135,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
 
   for (let i = 0; i < 3; i++) {
     const cloud = new Cloud({ fade: 1, growth: 1.5, speed: 1 });
-    cloud.color.set("#ffffff");
+    cloud.color.set("#9670ff");
 
     const newPosition = cloudPositions[i];
     cloud.position.copy(newPosition);
@@ -170,9 +201,9 @@ export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   if (sandParticles) {
     updateSandParticles(sandParticles); // Update sand particles
   }
-  // if (windParticles) {
-  //   console.log("UPDATING WIND PARTICLES ");
-  //   updateWindEffect(clock);
-  // }
+  if (windParticles) {
+    updateWindEffect(clock);
+  }
+
   renderer.render(scene, camera);
 }

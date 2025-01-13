@@ -4,7 +4,6 @@ import {
   loadBeachModel,
   loadCampfireModel,
   loadSummerMoon,
-  loadSpringPortal,
   loadAutumnPortal,
 } from "../loadAssets/summerAssets.js";
 import {
@@ -35,8 +34,7 @@ import {
   showLoadingScreen,
   hideLoadingScreen,
 } from "../customLoadingScreen.js";
-import { setupAutumnScene, updateAutumnScene } from "./autumnScene.js";
-
+import { switchToAutumnScene } from "./sceneSwitcher.js";
 let controls,
   water,
   fireLight,
@@ -118,7 +116,6 @@ export async function setupSummerScene(scene, camera, renderer) {
 
   await Promise.all([
     loadBeachModel(scene),
-    // loadSpringPortal(scene),
     loadAutumnPortal(scene).then((loadedPortal) => {
       portal = loadedPortal;
       scene.add(portal);
@@ -223,31 +220,9 @@ export function updateSummerScene(scene, clock, controls, camera, renderer) {
       console.log("COLLIDED WITH PORTAL");
 
       updateScene = () => {};
-      switchToAutumnScene(scene, camera, renderer);
+      switchToAutumnScene(scene, camera, renderer, composer);
     }
   }
   // composer.render(delta);
   renderer.render(scene, camera);
-}
-
-export function switchToAutumnScene(scene, camera, renderer) {
-  stopBackgroundMusic();
-  stopSoundEffect();
-  scene.clear();
-  renderer.clear();
-  composer.dispose();
-
-  console.log("Switching to autumn scene...");
-
-  setupAutumnScene(scene, camera, renderer)
-    .then(({ controls, particles }) => {
-      window.season = "autumn";
-      window.updateScene = (scene, clock, controls, camera) =>
-        updateAutumnScene(scene, clock, controls, camera, renderer);
-
-      console.log("Autumn scene setup complete.");
-    })
-    .catch((error) => {
-      console.error("Error setting up autumn scene:", error);
-    });
 }

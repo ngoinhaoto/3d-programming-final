@@ -39,7 +39,7 @@ function loadSummerMoon(scene, composer) {
         composer.addPass(renderPass);
         composer.addPass(effectPass);
 
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -63,7 +63,7 @@ function loadBeachModel(scene) {
 
         const beach = gltf.scene;
         scene.add(beach);
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -96,7 +96,7 @@ function loadCampfireModel(scene) {
         campfire.userData.fire = fire;
 
         console.log("Campfire model loaded successfully!");
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -108,54 +108,15 @@ function loadCampfireModel(scene) {
     );
   });
 }
-function loadSpringPortal(scene) {
+function loadAutumnPortal(scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(
       "/assets/ancient_portal.glb",
       (gltf) => {
-        gltf.scene.scale.set(0.2, 0.2, 0.2);
+        gltf.scene.scale.set(0.1, 0.1, 0.1);
         gltf.scene.position.set(-100, 0, -100);
-
-        gltf.scene.name = "portal";
-
-        scene.add(gltf.scene);
-
-        console.log("Portal model loaded successfully!");
-
-        const mixer = new THREE.AnimationMixer(gltf.scene);
-        gltf.animations.forEach((clip) => {
-          mixer.clipAction(clip).play();
-        });
-
-        const clock = new THREE.Clock();
-        function animate() {
-          requestAnimationFrame(animate);
-          const delta = clock.getDelta();
-          mixer.update(delta);
-        }
-        animate();
-        resolve();
-      },
-      (xhr) => {
-        console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
-      },
-      (error) => {
-        console.error("An error occurred while loading the GLTF file:", error);
-        reject(error);
-      }
-    );
-  });
-}
-
-function loadAutumnPortal(scene) {
-  return new Promise((resolve, reject) => {
-    const loader = new GLTFLoader();
-    loader.load(
-      "/assets/the_well_spiders_portal.glb",
-      (gltf) => {
-        gltf.scene.scale.set(14, 14, 14);
-        gltf.scene.position.set(0, 0, -100);
+        gltf.scene.rotation.y = Math.PI / 3;
 
         gltf.scene.name = "portal";
 
@@ -188,10 +149,4 @@ function loadAutumnPortal(scene) {
   });
 }
 
-export {
-  loadSpringPortal,
-  loadAutumnPortal,
-  loadCampfireModel,
-  loadBeachModel,
-  loadSummerMoon,
-};
+export { loadAutumnPortal, loadCampfireModel, loadBeachModel, loadSummerMoon };

@@ -15,7 +15,9 @@
     "cannon-es": "^0.20.0",
     "postprocessing": "^6.36.6",
     "three": "^0.171.0",
+    "three-nebula": "^10.0.3",
     "three.meshline": "^1.4.0",
+    "troika-three-text": "^0.52.3",
     "vite": "^6.0.3"
   }
 }

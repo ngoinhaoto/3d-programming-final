@@ -34,7 +34,7 @@ function loadCarouselModel(scene) {
           mixer.update(delta);
         }
         animate();
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -72,7 +72,7 @@ function loadMoonModel(scene) {
 
         scene.add(moon);
         console.log("Moon model loaded successfully!");
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -130,7 +130,7 @@ function loadChristmasGifts(scene) {
 
         scene.add(gltf.scene);
         console.log("Christmas gifts scene loaded successfully!");
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -154,7 +154,7 @@ function loadLowPolyWinterScene(scene) {
         scene.add(gltf.scene);
 
         console.log("Low Poly Winter Scene loaded successfully!");
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);
@@ -177,7 +177,7 @@ function loadDeerModel(scene) {
 
         const deer = gltf.scene;
         scene.add(deer);
-        resolve();
+        resolve(gltf.scene);
       },
       (xhr) => {
         console.log(`Loading progress: ${(xhr.loaded / xhr.total) * 100}%`);

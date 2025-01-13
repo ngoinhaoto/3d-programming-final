@@ -56,7 +56,7 @@ export const createSandParticles = (scene) => {
   );
 
   const pointMaterial = new THREE.PointsMaterial({
-    size: 5, // Increase the size of the particles
+    size: 8, // Increase the size of the particles
     color: 0xd2b48c, // Sand color
     vertexColors: false,
     map: getTexture(),

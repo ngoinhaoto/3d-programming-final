@@ -1,9 +1,5 @@
 import * as THREE from "three";
-import {
-  updateWinterScene,
-  setupWinterScene,
-  switchToSummerScene,
-} from "./scenes/winterScene"; // Import the switchToSummerScene function
+import { updateWinterScene, setupWinterScene } from "./scenes/winterScene"; // Import the switchToSummerScene function
 import { updateSummerScene, setupSummerScene } from "./scenes/summerScene";
 import { updateAutumnScene, setupAutumnScene } from "./scenes/autumnScene"; // Import the switchToAutumnScene function
 import { toggleMusic } from "./backgroundMusic";
@@ -18,7 +14,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "summer";
+window.season = "autumn";
 let controls, particles;
 
 async function initializeScene() {

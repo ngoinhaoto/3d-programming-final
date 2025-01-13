@@ -20,9 +20,8 @@ import {
   loadSpongebobModel,
   moveSpongebobSporadically,
 } from "../spongebobWinter.js";
-
 import { preloadSoundEffect, stopSoundEffect } from "../soundEffect.js";
-
+import { switchToSummerScene } from "./sceneSwitcher.js";
 import {
   moveForward,
   moveBackward,
@@ -156,17 +155,6 @@ function checkCollisionWithCabin(camera, cabin) {
   const cabinBox = new THREE.Box3().setFromObject(cabin);
 
   return cameraBox.intersectsBox(cabinBox);
-}
-
-export function switchToSummerScene(scene, camera, renderer) {
-  stopBackgroundMusic();
-  stopSoundEffect();
-  scene.clear();
-  renderer.clear();
-  const { controls, particles } = setupSummerScene(scene, camera, renderer);
-  window.season = "summer";
-  window.updateScene = (scene, clock, controls, camera) =>
-    updateSummerScene(scene, clock, controls, camera, renderer); // Set updateScene to updateSummerScene
 }
 
 export function updateWinterScene(scene, clock, controls, camera, renderer) {
