@@ -20,12 +20,23 @@ import {
 } from "../controls.js";
 import { preloadBackgroundMusic } from "../backgroundMusic.js";
 import { preloadSoundEffect } from "../soundEffect.js";
+import { createSwampTiles, updateSwampTiles } from "../swamp.js";
+import { createWaterSwamp, updateWaterSwamp } from "../waterSwamp.js";
 
-let controls, composer, clouds, particles;
+let controls, composer, clouds, particles, water;
 
 export async function setupSpringScene(scene, camera, renderer) {
   showLoadingScreen();
-  scene.background = new THREE.Color(0x1b2b3a);
+  const loader = new THREE.CubeTextureLoader().setPath("/assets/");
+  const skyboxTexture = loader.load([
+    "/celestial.png",
+    "/celestial.png",
+    "/celestial.png",
+    "/celestial.png",
+    "/celestial.png",
+    "/celestial.png",
+  ]);
+  scene.background = skyboxTexture;
 
   scene.fog = new THREE.Fog(0x000000, 0, 1000);
   document.body.appendChild(renderer.domElement);
@@ -55,7 +66,7 @@ export async function setupSpringScene(scene, camera, renderer) {
     fontUrl: "/assets/fonts/melgrim.json",
     size: 20,
     height: 2,
-    position: new THREE.Vector3(100, 120, -120),
+    position: new THREE.Vector3(100, 350, -120),
     rotation: new THREE.Vector3(0, 0, 0),
     scene: scene,
   });
@@ -65,8 +76,15 @@ export async function setupSpringScene(scene, camera, renderer) {
   });
   const ambientLight = new THREE.AmbientLight(0xffffff, 3);
   scene.add(ambientLight);
+
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
+  const { swampTiles, heightMaps } = await createSwampTiles(
+    scene,
+    "/assets/swamp_height_map.png"
+  );
+
+  water = createWaterSwamp(scene, renderer);
 
   hideLoadingScreen();
   return { controls, particles };
@@ -91,6 +109,8 @@ export function updateSpringScene(scene, clock, controls, camera, renderer) {
   if (moveRight) camera.position.addScaledVector(right, -movementSpeed);
   if (moveUp) camera.position.y += movementSpeed;
   if (moveDown) camera.position.y -= movementSpeed;
+  updateSwampTiles(camera);
+  updateWaterSwamp(water, clock);
 
   controls.update();
   renderer.render(scene, camera);
