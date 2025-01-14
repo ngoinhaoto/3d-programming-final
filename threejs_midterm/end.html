@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scene</title>
+
+    <!-- Link to the stylesheet -->
+    <link rel="stylesheet" href="./end.css" />
+
+    <!-- Vertex Shader -->
+    <script type="x-shader/x-vertex" id="vertexshader">
+      attribute float size;
+      attribute vec3 customColor;
+      varying vec3 vColor;
+
+      void main() {
+        vColor = customColor;
+        vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+        gl_PointSize = size * (300.0 / -mvPosition.z);
+        gl_Position = projectionMatrix * mvPosition;
+      }
+    </script>
+
+    <!-- Fragment Shader -->
+    <script type="x-shader/x-fragment" id="fragmentshader">
+      uniform vec3 color;
+      uniform sampler2D pointTexture;
+      varying vec3 vColor;
+
+      void main() {
+        gl_FragColor = vec4(color * vColor, 1.0);
+        gl_FragColor = gl_FragColor * texture2D(pointTexture, gl_PointCoord);
+      }
+    </script>
+  </head>
+  <body>
+    <!-- Magic Div -->
+    <div id="magic"></div>
+
+    <!-- Playground Section -->
+    <div class="playground">
+      <div class="bottomPosition">
+        <div style="text-align: center">
+          <a href="/" id="game-over-link">
+            <img
+              id="game-over-gif"
+              src="assets/game_over.gif"
+              alt="Game Over GIF"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Load the End Scene Script as a module -->
+    <script type="module" src="./src/scenes/endScene.js"></script>
+  </body>
+</html>

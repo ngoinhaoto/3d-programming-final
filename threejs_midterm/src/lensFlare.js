@@ -3,7 +3,7 @@ import { Lensflare, LensflareElement } from "three/addons/objects/Lensflare.js";
 
 export function createLensFlare(color) {
   // Point light and lens flare setup
-  const light = new THREE.PointLight(0xffffff, 4, 2000);
+  const light = new THREE.PointLight(0xffffff, 4, 10000);
 
   const textureLoader = new THREE.TextureLoader();
   const textureFlare0 = textureLoader.load(

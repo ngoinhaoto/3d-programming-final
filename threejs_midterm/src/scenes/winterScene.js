@@ -53,6 +53,9 @@ export async function setupWinterScene(scene, camera, renderer, callback) {
   scene.fog = new THREE.Fog(0x000036, 0, 500); // Add fog to simulate atmosphere
 
   camera.position.set(0, 10, 30); // Adjust the initial camera position
+  camera.near = 0.1;
+  camera.far = 10000;
+  camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -102,7 +105,6 @@ export async function setupWinterScene(scene, camera, renderer, callback) {
     height: 2,
     position: new THREE.Vector3(-20, 90, -150),
     rotation: new THREE.Vector3(0, 0, 0),
-
     scene: scene,
   });
   create3DText({

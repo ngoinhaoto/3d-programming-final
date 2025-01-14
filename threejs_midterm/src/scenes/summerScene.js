@@ -49,6 +49,9 @@ export async function setupSummerScene(scene, camera, renderer) {
   scene.fog = new THREE.Fog(0x000000, 0, 1200);
 
   camera.position.set(0, 3, 10);
+  camera.near = 0.1;
+  camera.far = 10000;
+  camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;

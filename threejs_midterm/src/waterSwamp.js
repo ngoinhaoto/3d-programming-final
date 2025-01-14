@@ -31,5 +31,5 @@ export function updateWaterSwamp(water, clock) {
   water.material.uniforms["time"].value += 1.0 / 60.0;
 
   const time = clock.getElapsedTime();
-  water.position.y = 50 + Math.sin(time * 1) * 25 + Math.cos(time * 0.75) * 5;
+  water.position.y = 35 + Math.sin(time * 1) * 50 + Math.cos(time * 0.75) * 20;
 }

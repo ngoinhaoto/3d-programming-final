@@ -15,7 +15,7 @@ export function showLoadingScreen() {
   loadingScreen.style.zIndex = "1000";
   loadingScreen.innerHTML = `
     <div style="text-align: center;">
-      <h1 class="loading-text">Loading...</h1>
+      <h1 class="loading-text">Porting you to new dimension...</h1>
       <div id="loading-animation" style="margin-top: 20px;">
         <div style="width: 50px; height: 50px; border: 5px solid #fff; border-top: 5px solid #000; border-radius: 50%; animation: spin 1s linear infinite; margin: 20px auto 0;"></div>
       </div>

@@ -46,10 +46,11 @@ export async function createSwampTile(heightMapUrl, size = 8000) {
     const x = vertices[i];
     const y = vertices[i + 1];
     const z = vertices[i + 2];
+    const heightDifference = 130;
 
     const height = getHeightFromMap(heightMap, x, y, size);
 
-    vertices[i + 2] = height * 130;
+    vertices[i + 2] = height * heightDifference;
   }
   plane.geometry.attributes.position.needsUpdate = true;
   plane.geometry.computeVertexNormals();
@@ -85,6 +86,7 @@ function getHeightFromMap(heightMap, x, y, size) {
   const b = heightMap.data[index + 2];
   return (r + g + b) / 3 / 255;
 }
+
 export async function createSwampTiles(scene, heightMapUrl) {
   swampTiles = [];
   heightMaps = [];
@@ -123,5 +125,47 @@ export function updateSwampTiles(camera) {
     if (Math.abs(cameraTileZ - tileZ) > Math.floor(numTiles / 2)) {
       tile.position.z += Math.sign(cameraTileZ - tileZ) * tileSize * numTiles;
     }
+  }
+}
+export async function loadTree() {
+  return new Promise((resolve, reject) => {
+    const loader = new GLTFLoader();
+    loader.load(
+      "/assets/swamp_tree.glb",
+      (gltf) => {
+        resolve(gltf.scene);
+      },
+      undefined,
+      (error) => {
+        reject(error);
+      }
+    );
+  });
+}
+
+export async function placeTreeOnSwamp(scene, numTree = 350) {
+  const treeModel = await loadTree();
+  for (let i = 0; i < numTree; i++) {
+    const tileIndex = Math.floor(Math.random() * swampTiles.length);
+    const tile = swampTiles[tileIndex];
+    const heightMap = heightMaps[tileIndex];
+
+    const xRange = tile.geometry.parameters.width / 1.3;
+    const zRange = tile.geometry.parameters.height / 1.3;
+
+    const x = Math.random() * xRange - xRange / 2;
+    const z = Math.random() * zRange - zRange / 2;
+
+    const y = getHeightFromMap(heightMap, x, z, tile.geometry.parameters.width);
+
+    const tree = treeModel.clone();
+    tree.position.set(x + tile.position.x, y, z + tile.position.z);
+
+    const scale = Math.random() * 35 + 35;
+    tree.scale.set(scale, scale, scale);
+
+    tree.rotation.y = Math.random() * Math.PI * 2;
+
+    scene.add(tree);
   }
 }

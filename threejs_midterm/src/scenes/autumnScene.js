@@ -60,9 +60,12 @@ export async function setupAutumnScene(scene, camera, renderer) {
 
   document.body.appendChild(renderer.domElement);
 
-  scene.fog = new THREE.Fog(0x000000, 0, 1000);
+  scene.fog = new THREE.Fog(0x000000, 0, 1200);
 
   camera.position.set(100, 100, 150);
+  camera.near = 0.1;
+  camera.far = 10000;
+  camera.updateProjectionMatrix();
 
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -88,7 +91,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
     controls.lock();
   });
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 3);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 5);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xffc34d, 35);

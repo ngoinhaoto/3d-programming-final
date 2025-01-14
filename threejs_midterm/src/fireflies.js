@@ -10,7 +10,7 @@ import { FireFlyMaterial } from "./helpers/FireFlyMaterial";
 
 let fireflies = [];
 
-export function createFireflies(scene) {
+export function createFireflies(scene, fireflyCount = 100) {
   const fireflyGeometry = new PlaneGeometry(0.4, 0.4); // Adjust the size of the firefly as desired
   const fireflyMaterial = new FireFlyMaterial({
     uTime: 0,
@@ -18,7 +18,6 @@ export function createFireflies(scene) {
     uColor: new THREE.Color(0xffff00),
   });
 
-  const fireflyCount = 100;
   const fireflyParticles = new InstancedMesh(
     fireflyGeometry,
     fireflyMaterial,
