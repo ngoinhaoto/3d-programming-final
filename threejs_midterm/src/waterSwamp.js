@@ -9,15 +9,15 @@ export function createWaterSwamp(scene, renderer) {
     textureHeight: 600,
     waterNormals: new THREE.TextureLoader().load(
       "/assets/particles/waternormals.jpg",
-      function (texture) {
+      (texture) => {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
       }
     ),
-    sunDirection: new THREE.Vector3(),
-    sunColor: 0x00ff00, // Greenish sun color
-    waterColor: 0x001e0f,
-    distortionScale: 3.7,
-    fog: scene.fog !== undefined,
+    sunDirection: new THREE.Vector3(0, 1, 0),
+    sunColor: 0x063300, // Swampy green reflection
+    waterColor: 0x063300, // Dark green for murkiness
+    distortionScale: 3, // Lower distortion for a swampy look
+    fog: true,
   });
 
   water.rotation.x = -Math.PI / 2;

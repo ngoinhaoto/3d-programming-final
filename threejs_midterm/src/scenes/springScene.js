@@ -27,18 +27,20 @@ let controls, composer, clouds, particles, water;
 
 export async function setupSpringScene(scene, camera, renderer) {
   showLoadingScreen();
-  const loader = new THREE.CubeTextureLoader().setPath("/assets/");
+  const loader = new THREE.CubeTextureLoader().setPath(
+    "/assets/moonnight_green/"
+  );
   const skyboxTexture = loader.load([
-    "/celestial.png",
-    "/celestial.png",
-    "/celestial.png",
-    "/celestial.png",
-    "/celestial.png",
-    "/celestial.png",
+    "px.png",
+    "nx.png",
+    "py.png",
+    "ny.png",
+    "pz.png",
+    "nz.png",
   ]);
   scene.background = skyboxTexture;
 
-  scene.fog = new THREE.Fog(0x000000, 0, 1000);
+  scene.fog = new THREE.Fog(0x000000, 0, 800);
   document.body.appendChild(renderer.domElement);
 
   camera.position.set(100, 100, 150);
@@ -63,10 +65,14 @@ export async function setupSpringScene(scene, camera, renderer) {
 
   create3DText({
     text: "SPOOKY SPRING!",
-    fontUrl: "/assets/fonts/melgrim.json",
-    size: 20,
-    height: 2,
-    position: new THREE.Vector3(100, 350, -120),
+    fontUrl: "/assets/fonts/creepster.json",
+    size: 50,
+    height: 1,
+    color: 0x659400,
+    outlineColor: 0xffffff,
+    outlineThickness: 3,
+
+    position: new THREE.Vector3(100, 400, -120),
     rotation: new THREE.Vector3(0, 0, 0),
     scene: scene,
   });

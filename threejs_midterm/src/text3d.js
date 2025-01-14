@@ -15,9 +15,14 @@ export function create3DText({
   bevelSegments = 4,
   position = new THREE.Vector3(0, 0, 0),
   rotation = new THREE.Vector3(0, 0, 0),
-  color = null,
+  color = null, // Use MeshNormalMaterial if null
+  specularColor = 0xaaaaaa,
+  shininess = 200,
   outlineColor = 0x000000,
   outlineThickness = 0.05,
+  bumpMap = null, // Optional bump map texture for surface detail
+  bumpScale = 0.02,
+  envMap = null, // Optional environment map for reflection
   scene,
 }) {
   const fontLoader = new FontLoader();
@@ -37,15 +42,25 @@ export function create3DText({
 
     textGeometry.center();
 
+    // Choose material based on whether color is provided
     const textMaterial = color
-      ? new THREE.MeshBasicMaterial({ color: color })
-      : new THREE.MeshNormalMaterial();
+      ? new THREE.MeshPhongMaterial({
+          color: color,
+          specular: specularColor,
+          shininess: shininess,
+          bumpMap: bumpMap,
+          bumpScale: bumpScale,
+          envMap: envMap,
+          reflectivity: envMap ? 0.5 : 0,
+        })
+      : new THREE.MeshNormalMaterial(); // Fallback material
 
     const textMesh = new THREE.Mesh(textGeometry, textMaterial);
     textMesh.position.copy(position);
     textMesh.rotation.set(rotation.x, rotation.y, rotation.z);
     scene.add(textMesh);
 
+    // Create the outline
     if (color) {
       const outlineGeometry = new TextGeometry(text, {
         font: font,
@@ -61,8 +76,12 @@ export function create3DText({
 
       outlineGeometry.center();
 
-      const outlineMaterial = new THREE.MeshBasicMaterial({
+      const outlineMaterial = new THREE.MeshPhongMaterial({
         color: outlineColor,
+        specular: specularColor,
+        shininess: shininess,
+        bumpMap: bumpMap,
+        bumpScale: bumpScale,
         side: THREE.BackSide,
       });
 

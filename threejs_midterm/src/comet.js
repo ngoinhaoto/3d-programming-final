@@ -10,7 +10,7 @@ import {
 const comets = [];
 const cometLights = [];
 const trails = [];
-const numComets = 4;
+const numComets = 8;
 
 export function createComets(scene, composer) {
   for (let i = 0; i < numComets; i++) {

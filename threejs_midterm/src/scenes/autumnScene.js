@@ -35,6 +35,8 @@ import {
 } from "../controls.js";
 import { preloadBackgroundMusic } from "../backgroundMusic.js";
 import { preloadSoundEffect } from "../soundEffect.js";
+import { switchToSpringScene } from "./sceneSwitcher.js";
+
 let controls,
   composer,
   particles,
@@ -188,6 +190,21 @@ export async function setupAutumnScene(scene, camera, renderer) {
   return { controls, particles };
 }
 
+function checkCollisionWithPortal(camera, portal) {
+  const cameraBox = new THREE.Box3().setFromCenterAndSize(
+    camera.position,
+    new THREE.Vector3(1, 1, 1)
+  );
+
+  if (!portal) {
+    console.log("Portal is not defined");
+    return false;
+  }
+
+  const portalBox = new THREE.Box3().setFromObject(portal);
+  return cameraBox.intersectsBox(portalBox);
+}
+
 export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   const movementSpeed = 1;
   const delta = clock.getDelta();
@@ -218,6 +235,15 @@ export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   }
   if (windParticles) {
     updateWindEffect(clock);
+  }
+
+  if (portal) {
+    if (checkCollisionWithPortal(camera, portal)) {
+      console.log("COLLIDED WITH PORTAL");
+
+      updateScene = () => {};
+      switchToSpringScene(scene, camera, renderer, composer);
+    }
   }
 
   renderer.render(scene, camera);
