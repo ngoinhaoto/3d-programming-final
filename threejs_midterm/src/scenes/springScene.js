@@ -9,7 +9,7 @@ import {
   hideLoadingScreen,
 } from "../customLoadingScreen.js";
 import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
-import { light } from "../lensFlare.js";
+import { createLensFlare } from "../lensFlare.js";
 import {
   moveForward,
   moveBackward,
@@ -59,18 +59,16 @@ export async function setupSpringScene(scene, camera, renderer) {
   controls.pointerSpeed = 0.5;
 
   scene.add(controls.getObject());
+  const light = createLensFlare();
 
   light.position.set(50, 470, -400); // Adjust the position as needed
   scene.add(light);
 
   create3DText({
     text: "SPOOKY SPRING!",
-    fontUrl: "/assets/fonts/creepster.json",
+    fontUrl: "/assets/fonts/shadow.json",
     size: 50,
     height: 1,
-    color: 0x659400,
-    outlineColor: 0xffffff,
-    outlineThickness: 3,
 
     position: new THREE.Vector3(100, 400, -120),
     rotation: new THREE.Vector3(0, 0, 0),

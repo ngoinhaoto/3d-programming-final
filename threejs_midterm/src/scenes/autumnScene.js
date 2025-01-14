@@ -23,7 +23,7 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/examples/jsm/postprocessing/UnrealBloomPass";
 import { Clouds, Cloud, CLOUD_URL } from "@pmndrs/vanilla";
 import { createSandParticles, updateSandParticles } from "../sandParticles.js"; // Import sand particles
-import { light } from "../lensFlare.js";
+import { createLensFlare } from "../lensFlare.js";
 import { createWindEffect, updateWindEffect } from "../wind.js";
 import {
   moveForward,
@@ -78,6 +78,8 @@ export async function setupAutumnScene(scene, camera, renderer) {
   controls.pointerSpeed = 0.5;
 
   scene.add(controls.getObject());
+
+  const light = createLensFlare();
 
   light.position.set(50, 470, -400); // Adjust the position as needed
   scene.add(light);
