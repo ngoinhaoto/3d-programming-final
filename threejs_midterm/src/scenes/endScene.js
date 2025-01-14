@@ -11,9 +11,7 @@ const preload = () => {
   const font = loader.load("/assets/fonts/melgrim.json", function (font) {
     typo = font;
   });
-  const particle = new THREE.TextureLoader(manager).load(
-    "https://res.cloudinary.com/dfvtkoboz/image/upload/v1605013866/particle_a64uzf.png"
-  );
+  const particle = new THREE.TextureLoader(manager).load("/assets/heart.png");
 };
 
 if (
