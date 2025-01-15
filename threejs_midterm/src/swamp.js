@@ -13,10 +13,10 @@ export async function createSwampTile(heightMapUrl, size = 8000) {
   // Load textures
   const textureLoader = new THREE.TextureLoader();
   const terrainTexture = textureLoader.load(
-    "/assets/textures/mud_forest_diff_1k.jpg"
+    "/assets/textures/mud_forest_diff_1k.jpg",
   );
   const displacementTexture = textureLoader.load(
-    "/assets/textures/mud_forest_disp_1k.png"
+    "/assets/textures/mud_forest_disp_1k.png",
   );
 
   // Set texture properties
@@ -99,7 +99,7 @@ export async function createSwampTiles(scene, heightMapUrl) {
     ) {
       const { plane, heightMap } = await createSwampTile(
         heightMapUrl,
-        tileSize
+        tileSize,
       );
       plane.position.set(i * tileSize, -7, j * tileSize);
       swampTiles.push(plane);
@@ -138,12 +138,12 @@ export async function loadTree() {
       undefined,
       (error) => {
         reject(error);
-      }
+      },
     );
   });
 }
 
-export async function placeTreeOnSwamp(scene, numTree = 350) {
+export async function placeTreeOnSwamp(scene, numTree = 250) {
   const treeModel = await loadTree();
   for (let i = 0; i < numTree; i++) {
     const tileIndex = Math.floor(Math.random() * swampTiles.length);

@@ -22,7 +22,7 @@ function loadOldBuildingModel(scene) {
       (error) => {
         console.error("An error occurred while loading the GLB file:", error);
         reject(error);
-      }
+      },
     );
   });
 }
@@ -47,7 +47,7 @@ function loadPropSwamp(scene) {
       (error) => {
         console.error("An error occurred while loading the GLB file:", error);
         reject(error);
-      }
+      },
     );
   });
 }
@@ -72,7 +72,7 @@ function loadForestLoner(scene) {
       (error) => {
         console.error("An error occurred while loading the GLB file:", error);
         reject(error);
-      }
+      },
     );
   });
 }
@@ -109,7 +109,7 @@ function sprinkleWoodenCabins(scene) {
         (error) => {
           console.error("An error occurred while loading the GLB file:", error);
           reject(error);
-        }
+        },
       );
     });
   });
@@ -149,7 +149,7 @@ function sprinkleAbandonedHouses(scene) {
         (error) => {
           console.error("An error occurred while loading the GLB file:", error);
           reject(error);
-        }
+        },
       );
     });
   });
@@ -194,7 +194,7 @@ function loadWindmill(scene) {
       (error) => {
         console.error("An error occurred while loading the GLTF file:", error);
         reject(error);
-      }
+      },
     );
   });
 }
@@ -202,7 +202,7 @@ function loadEndPortal(scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(
-      "/assets/isomatrix_glitch.glb",
+      "/assets/isomatrix_glitch_1k.glb",
       (gltf) => {
         gltf.scene.scale.set(250, 250, 250);
         gltf.scene.position.set(-1800, 500, 1400);
@@ -244,7 +244,7 @@ function loadEndPortal(scene) {
       (error) => {
         console.error("An error occurred while loading the GLTF file:", error);
         reject(error);
-      }
+      },
     );
   });
 }

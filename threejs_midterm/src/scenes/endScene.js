@@ -11,7 +11,7 @@ const preload = () => {
   const font = loader.load("/assets/fonts/melgrim.json", function (font) {
     typo = font;
   });
-  const particle = new THREE.TextureLoader(manager).load("/assets/circle.png");
+  const particle = new THREE.TextureLoader(manager).load("/assets/heart.png");
 };
 
 if (
@@ -43,7 +43,7 @@ class Environment {
       this.font,
       this.particle,
       this.camera,
-      this.renderer
+      this.renderer,
     );
   }
 
@@ -57,7 +57,7 @@ class Environment {
       65,
       this.container.clientWidth / this.container.clientHeight,
       1,
-      10000
+      10000,
     );
     this.camera.position.set(0, 0, 100);
   }
@@ -66,7 +66,7 @@ class Environment {
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(
       this.container.clientWidth,
-      this.container.clientHeight
+      this.container.clientHeight,
     );
 
     this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -85,7 +85,7 @@ class Environment {
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(
       this.container.clientWidth,
-      this.container.clientHeight
+      this.container.clientHeight,
     );
   }
 }
@@ -122,7 +122,7 @@ class CreateParticles {
   setup() {
     const geometry = new THREE.PlaneGeometry(
       this.visibleWidthAtZDepth(100, this.camera),
-      this.visibleHeightAtZDepth(100, this.camera)
+      this.visibleHeightAtZDepth(100, this.camera),
     );
     const material = new THREE.MeshBasicMaterial({
       color: 0x00ff00,
@@ -198,7 +198,7 @@ class CreateParticles {
           i,
           this.colorChange.r,
           this.colorChange.g,
-          this.colorChange.b
+          this.colorChange.b,
         );
         coulors.needsUpdate = true;
 
@@ -223,7 +223,7 @@ class CreateParticles {
             i,
             this.colorChange.r,
             this.colorChange.g,
-            this.colorChange.b
+            this.colorChange.b,
           );
           coulors.needsUpdate = true;
 
@@ -238,7 +238,7 @@ class CreateParticles {
               i,
               this.colorChange.r,
               this.colorChange.g,
-              this.colorChange.b
+              this.colorChange.b,
             );
             coulors.needsUpdate = true;
           }
@@ -254,7 +254,7 @@ class CreateParticles {
                 i,
                 this.colorChange.r,
                 this.colorChange.g,
-                this.colorChange.b
+                this.colorChange.b,
               );
               coulors.needsUpdate = true;
 
@@ -283,7 +283,7 @@ class CreateParticles {
                 i,
                 this.colorChange.r,
                 this.colorChange.g,
-                this.colorChange.b
+                this.colorChange.b,
               );
               coulors.needsUpdate = true;
 
@@ -355,11 +355,11 @@ class CreateParticles {
 
     geoParticles.setAttribute(
       "customColor",
-      new THREE.Float32BufferAttribute(colors, 3)
+      new THREE.Float32BufferAttribute(colors, 3),
     );
     geoParticles.setAttribute(
       "size",
-      new THREE.Float32BufferAttribute(sizes, 1)
+      new THREE.Float32BufferAttribute(sizes, 1),
     );
 
     const material = new THREE.ShaderMaterial({

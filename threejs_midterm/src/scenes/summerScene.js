@@ -175,7 +175,7 @@ export async function setupSummerScene(scene, camera, renderer) {
 function checkCollisionWithPortal(camera, portal) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(
     camera.position,
-    new THREE.Vector3(1, 1, 1)
+    new THREE.Vector3(1, 1, 1),
   );
 
   if (!portal) {
@@ -188,7 +188,7 @@ function checkCollisionWithPortal(camera, portal) {
 }
 
 export function updateSummerScene(scene, clock, controls, camera, renderer) {
-  const summerMovementSpeed = 0.5;
+  const summerMovementSpeed = 0.25;
   const delta = clock.getDelta();
   controls.update();
 

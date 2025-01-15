@@ -43,7 +43,7 @@ let controls, composer, clouds, particles, water, portal;
 export async function setupSpringScene(scene, camera, renderer) {
   showLoadingScreen();
   const loader = new THREE.CubeTextureLoader().setPath(
-    "/assets/moonnight_green/"
+    "/assets/moonnight_green/",
   );
   const skyboxTexture = loader.load([
     "px.png",
@@ -83,9 +83,9 @@ export async function setupSpringScene(scene, camera, renderer) {
   composer.addPass(new RenderPass(scene, camera));
   const { swampTiles, heightMaps } = await createSwampTiles(
     scene,
-    "/assets/swamp_height_map.png"
+    "/assets/swamp_height_map.png",
   );
-  await placeTreeOnSwamp(scene);
+  await placeTreeOnSwamp(scene, 250);
   await Promise.all([
     loadOldBuildingModel(scene),
     loadWindmill(scene),
@@ -105,7 +105,7 @@ export async function setupSpringScene(scene, camera, renderer) {
   light.position.set(4000, 3200, -3000);
   scene.add(light);
 
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.25);
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
   scene.add(ambientLight);
 
   const directionalLight = new THREE.DirectionalLight(0xfffbb6, 5);
@@ -117,7 +117,7 @@ export async function setupSpringScene(scene, camera, renderer) {
   directionalLight.shadow.camera.near = 0.5;
   directionalLight.shadow.camera.far = 15000;
 
-  createWillOWisps(scene, 125);
+  createWillOWisps(scene, 120);
 
   const cloudTexture = new THREE.TextureLoader().load(CLOUD_URL);
   clouds = new Clouds({ texture: cloudTexture, frustumCulled: false });
@@ -200,7 +200,7 @@ export async function setupSpringScene(scene, camera, renderer) {
 function checkCollisionWithPortal(camera, portal) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(
     camera.position,
-    new THREE.Vector3(1, 1, 1)
+    new THREE.Vector3(1, 1, 1),
   );
 
   if (!portal) {
@@ -213,7 +213,7 @@ function checkCollisionWithPortal(camera, portal) {
 }
 
 export function updateSpringScene(scene, clock, controls, camera, renderer) {
-  const movementSpeed = 7;
+  const movementSpeed = 15;
   const delta = clock.getDelta();
   controls.update();
 

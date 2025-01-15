@@ -33,7 +33,7 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
-import { loadVideoCube } from "../loadVideo.js";
+import { loadVideoCube, disposeVideo } from "../loadVideo.js";
 import { preloadBackgroundMusic } from "../backgroundMusic.js";
 import { preloadSoundEffect } from "../soundEffect.js";
 import { switchToSpringScene } from "./sceneSwitcher.js";
@@ -152,7 +152,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
     cloud.scale.set(
       Math.random() * 10 + 25,
       Math.random() * 5 + 25,
-      Math.random() * 10 + 25
+      Math.random() * 10 + 25,
     );
 
     cloud.growth = Math.random() * 0.5 + 0.5;
@@ -203,7 +203,7 @@ export async function setupAutumnScene(scene, camera, renderer) {
 function checkCollisionWithPortal(camera, portal) {
   const cameraBox = new THREE.Box3().setFromCenterAndSize(
     camera.position,
-    new THREE.Vector3(1, 1, 1)
+    new THREE.Vector3(1, 1, 1),
   );
 
   if (!portal) {
@@ -253,8 +253,8 @@ export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   if (portal) {
     if (checkCollisionWithPortal(camera, portal)) {
       console.log("COLLIDED WITH PORTAL");
-
       updateScene = () => {};
+
       switchToSpringScene(scene, camera, renderer, composer);
     }
   }

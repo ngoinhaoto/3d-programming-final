@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { Water } from "three/examples/jsm/objects/Water";
 
 export function createWaterSwamp(scene, renderer) {
-  const waterGeometry = new THREE.PlaneGeometry(10000, 10000);
+  const waterGeometry = new THREE.PlaneGeometry(8000, 8000);
 
   const water = new Water(waterGeometry, {
     textureWidth: 600,
@@ -11,7 +11,7 @@ export function createWaterSwamp(scene, renderer) {
       "/assets/particles/waternormals.jpg",
       (texture) => {
         texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-      }
+      },
     ),
     sunDirection: new THREE.Vector3(0, 1, 0),
     sunColor: 0x063300, // Swampy green reflection
