@@ -15,7 +15,7 @@ Ensure you have the following installed on your system:
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/ngoinhaoto/3d-programming-midterm
+   git clone https://github.com/ngoinhaoto/3d-programming-final
    ```
 
 2. **Navigate to the Project Directory**
