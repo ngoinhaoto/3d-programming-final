@@ -202,17 +202,22 @@ function loadEndPortal(scene) {
   return new Promise((resolve, reject) => {
     const loader = new GLTFLoader();
     loader.load(
-      "/assets/tannhauser_gate.glb",
+      "/assets/isomatrix_glitch.glb",
       (gltf) => {
-        gltf.scene.scale.set(300, 300, 300);
+        gltf.scene.scale.set(250, 250, 250);
         gltf.scene.position.set(-1800, 500, 1400);
-        gltf.scene.rotation.y = Math.PI / 6;
+        gltf.scene.rotation.y = Math.PI / 6 + Math.PI / 2;
 
-        gltf.scene.name = "tannhauser_gate";
+        gltf.scene.name = "isomatrix_glitch";
+        gltf.scene.traverse((child) => {
+          if (child.isMesh) {
+            child.material.fog = false;
+          }
+        });
 
         scene.add(gltf.scene);
 
-        console.log("magic_gate loaded successfully!");
+        console.log("isomatrix_glitch loaded successfully!");
 
         const mixer = new THREE.AnimationMixer(gltf.scene);
         gltf.animations.forEach((clip) => {

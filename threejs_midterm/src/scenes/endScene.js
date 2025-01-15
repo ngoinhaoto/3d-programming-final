@@ -11,7 +11,7 @@ const preload = () => {
   const font = loader.load("/assets/fonts/melgrim.json", function (font) {
     typo = font;
   });
-  const particle = new THREE.TextureLoader(manager).load("/assets/heart.png");
+  const particle = new THREE.TextureLoader(manager).load("/assets/circle.png");
 };
 
 if (

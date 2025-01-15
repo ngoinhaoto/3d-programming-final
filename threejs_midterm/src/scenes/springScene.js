@@ -55,7 +55,7 @@ export async function setupSpringScene(scene, camera, renderer) {
   ]);
   scene.background = skyboxTexture;
 
-  scene.fog = new THREE.Fog(0x000f04, 0, 2400);
+  scene.fog = new THREE.Fog(0x000f04, 0, 1900);
   document.body.appendChild(renderer.domElement);
 
   camera.position.set(100, 100, 500);
@@ -188,7 +188,7 @@ export async function setupSpringScene(scene, camera, renderer) {
     bevelThickness: 9,
     bevelSize: 4,
     outlineThickness: 10,
-    position: new THREE.Vector3(-1600, 600, 1350),
+    position: new THREE.Vector3(-1400, 600, 1200),
     rotation: new THREE.Vector3(0, Math.PI / 2 + Math.PI / 6, 0),
     scene: scene,
   });
