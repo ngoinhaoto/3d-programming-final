@@ -3,6 +3,7 @@ import { setupSummerScene, updateSummerScene } from "./summerScene";
 import { setupAutumnScene, updateAutumnScene } from "./autumnScene";
 import { setupSpringScene, updateSpringScene } from "./springScene";
 import { stopSoundEffect } from "../soundEffect";
+import { disposeVideo } from "../loadVideo";
 export function switchToSummerScene(scene, camera, renderer) {
   stopBackgroundMusic();
   stopSoundEffect();
@@ -39,6 +40,7 @@ export function switchToAutumnScene(scene, camera, renderer, composer) {
 export function switchToSpringScene(scene, camera, renderer, composer) {
   stopBackgroundMusic();
   stopSoundEffect();
+  disposeVideo();
   scene.clear();
   renderer.clear();
   composer.dispose();

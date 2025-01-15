@@ -33,6 +33,7 @@ import {
   moveUp,
   moveDown,
 } from "../controls.js";
+import { loadVideoCube } from "../loadVideo.js";
 import { preloadBackgroundMusic } from "../backgroundMusic.js";
 import { preloadSoundEffect } from "../soundEffect.js";
 import { switchToSpringScene } from "./sceneSwitcher.js";
@@ -44,7 +45,9 @@ let controls,
   sandParticles,
   windParticles,
   island,
-  portal;
+  movieCubeScreen,
+  portal,
+  videoTexture;
 export async function setupAutumnScene(scene, camera, renderer) {
   showLoadingScreen();
   const loader = new THREE.CubeTextureLoader();
@@ -188,7 +191,9 @@ export async function setupAutumnScene(scene, camera, renderer) {
     scene: scene,
   });
 
-  sandParticles = createSandParticles(scene); // Create sand particles
+  sandParticles = createSandParticles(scene);
+  const { movieCubeScreen, videoTexture: vt } = loadVideoCube(scene);
+  videoTexture = vt;
 
   hideLoadingScreen();
 
@@ -240,6 +245,9 @@ export function updateAutumnScene(scene, clock, controls, camera, renderer) {
   }
   if (windParticles) {
     updateWindEffect(clock);
+  }
+  if (videoTexture) {
+    videoTexture.needsUpdate = true;
   }
 
   if (portal) {

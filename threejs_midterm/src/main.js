@@ -15,7 +15,7 @@ const camera = new THREE.PerspectiveCamera(
 );
 const renderer = new THREE.WebGLRenderer();
 
-window.season = "spring";
+window.season = "autumn";
 let controls, particles;
 
 async function initializeScene() {
